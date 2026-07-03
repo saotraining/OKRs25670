@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>แดชบอร์ดผลประเมิน — สัมมนามอบนโยบาย OKRs 2570</title>
+<title>ผลประเมินโครงการสัมมนามอบนโยบาย OKRs 2570</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -11,27 +11,27 @@
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <style>
   :root {
-    --bg: #F4F8FC;
+    /* โทนสีเรียบ สุภาพ เข้ากับแบนเนอร์น้ำเงิน-ทอง */
+    --bg: #F2F6FA;
     --card: #FFFFFF;
-    --navy: #0A2540;
-    --primary: #0077B6;
-    --primary-soft: #E6F0FA;
-    --gold: #D4A017;
-    --gold-soft: #FFF5DC;
-    --text: #1A2332;
-    --text-mid: #5A6776;
-    --text-soft: #94A3B8;
-    --border: #E2E8F0;
-    /* Likert interpretation colors */
-    --likert-5: #059669;     /* มากที่สุด — เขียวเข้ม */
-    --likert-4: #10B981;     /* มาก — เขียวกลาง */
-    --likert-3: #F59E0B;     /* ปานกลาง — เหลือง */
-    --likert-2: #F97316;     /* น้อย — ส้ม */
-    --likert-1: #DC2626;     /* น้อยที่สุด — แดง */
-    --shadow: 0 1px 3px rgba(10,37,64,0.04), 0 4px 12px rgba(10,37,64,0.04);
+    --navy: #082A4D;
+    --primary: #0B78B8;
+    --primary-soft: #EAF4FB;
+    --gold: #C79A2B;
+    --gold-soft: #FFF7E6;
+    --text: #102033;
+    --text-mid: #5F6F82;
+    --text-soft: #91A0B3;
+    --border: #DCE7F1;
+    --likert-5: #0B8F6A;
+    --likert-4: #18B884;
+    --likert-3: #F0A51A;
+    --likert-2: #EA7A18;
+    --likert-1: #D33A3A;
+    --shadow: 0 1px 2px rgba(8,42,77,0.05), 0 8px 22px rgba(8,42,77,0.06);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { background: var(--bg); color: var(--text); font-family: 'Sarabun', sans-serif; line-height: 1.5; }
+  html, body { background: radial-gradient(circle at top left, #FFFFFF 0, #F2F6FA 38%, #EDF3F8 100%); color: var(--text); font-family: 'Sarabun', sans-serif; line-height: 1.5; }
   body { min-height: 100vh; padding: 24px 16px 48px; }
   .container { max-width: 1280px; margin: 0 auto; }
 
@@ -53,23 +53,81 @@
     aspect-ratio: 1600 / 685;
     object-fit: cover;
   }
+
+  .tech-light-layer {
+    position: absolute;
+    inset: 0 0 44px 0;
+    pointer-events: none;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 15% 25%, rgba(255,255,255,.30) 0 2px, transparent 3px),
+      radial-gradient(circle at 72% 18%, rgba(255,255,255,.35) 0 2px, transparent 3px),
+      radial-gradient(circle at 88% 52%, rgba(255,255,255,.35) 0 1.5px, transparent 3px),
+      linear-gradient(120deg, transparent 0%, rgba(255,255,255,.12) 48%, transparent 58%);
+    mix-blend-mode: screen;
+  }
+  .tech-light-layer::before,
+  .tech-light-layer::after {
+    content: '';
+    position: absolute;
+    width: 220px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.75), rgba(94,205,242,.75), transparent);
+    filter: drop-shadow(0 0 8px rgba(94,205,242,.75));
+    transform: rotate(-24deg);
+    opacity: .45;
+    animation: lightSweep 6s linear infinite;
+  }
+  .tech-light-layer::before { left: -260px; top: 36%; }
+  .tech-light-layer::after { left: -320px; top: 64%; animation-delay: 2.4s; }
+  .tech-light-layer span {
+    position: absolute;
+    bottom: -40px;
+    width: 2px;
+    height: 110px;
+    background: linear-gradient(0deg, transparent, rgba(255,255,255,.75), rgba(110,231,200,.25));
+    border-radius: 999px;
+    filter: drop-shadow(0 0 10px rgba(110,231,200,.8));
+    opacity: .55;
+    animation: riseLight 5.5s ease-in-out infinite;
+  }
+  .tech-light-layer span:nth-child(1) { left: 18%; animation-delay: .2s; }
+  .tech-light-layer span:nth-child(2) { left: 34%; height: 140px; animation-delay: 1.1s; }
+  .tech-light-layer span:nth-child(3) { left: 58%; animation-delay: 2s; }
+  .tech-light-layer span:nth-child(4) { left: 74%; height: 130px; animation-delay: 3s; }
+  .tech-light-layer span:nth-child(5) { left: 91%; animation-delay: 4.1s; }
+  @keyframes lightSweep {
+    0% { transform: translateX(0) rotate(-24deg); opacity: 0; }
+    12% { opacity: .85; }
+    70% { opacity: .85; }
+    100% { transform: translateX(1900px) rotate(-24deg); opacity: 0; }
+  }
+  @keyframes riseLight {
+    0%, 100% { transform: translateY(30px) scaleY(.65); opacity: 0; }
+    35% { opacity: .75; }
+    70% { transform: translateY(-140px) scaleY(1); opacity: .15; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tech-light-layer, .tech-light-layer::before, .tech-light-layer::after, .tech-light-layer span { animation: none !important; }
+  }
+
   .header-meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px 28px;
+    gap: 12px 24px;
     align-items: center;
-    padding: 14px 28px;
-    background: linear-gradient(135deg, var(--navy) 0%, var(--primary) 100%);
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #071F3A 0%, #0B5F9B 68%, #0E7EAF 100%);
     color: white;
     font-size: 13px;
   }
   .header-meta div span:first-child {
     display: block;
-    opacity: 0.65;
-    font-size: 10px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-bottom: 2px;
+    opacity: 0.70;
+    font-size: 11px;
+    letter-spacing: 0;
+    text-transform: none;
+    margin-bottom: 1px;
   }
   .header-meta div span:last-child {
     font-family: 'Prompt', sans-serif;
@@ -382,46 +440,32 @@
 
   /* ============ Executive Summary ============ */
   .exec-summary {
-    background: linear-gradient(135deg, #FFFFFF 0%, var(--primary-soft) 100%);
-    border-left: 5px solid var(--primary);
+    background: linear-gradient(135deg, #FFFFFF 0%, #F5FAFE 100%);
+    border-left: 4px solid var(--primary);
     border-radius: 14px;
-    padding: 22px 28px;
-    margin-bottom: 20px;
+    padding: 16px 22px;
+    margin-bottom: 16px;
     display: flex;
-    gap: 20px;
+    gap: 0;
     align-items: center;
     box-shadow: var(--shadow);
+    border: 1px solid var(--border);
   }
-  .exec-summary-icon {
-    font-size: 42px;
-    flex-shrink: 0;
-    line-height: 1;
-  }
+  .exec-summary-icon { display: none; }
   .exec-summary-content { flex: 1; min-width: 0; }
-  .exec-summary-eyebrow {
-    font-family: 'Prompt', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    color: var(--primary);
-    margin-bottom: 6px;
-  }
+  .exec-summary-eyebrow { display: none; }
   .exec-summary-text {
     font-size: 15px;
-    line-height: 1.6;
+    line-height: 1.65;
     color: var(--text);
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
   .exec-summary-text strong {
     color: var(--navy);
     font-family: 'Prompt', sans-serif;
     font-weight: 600;
   }
-  .exec-summary-chips {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
+  .exec-summary-chips { display: none; }
   .exec-chip {
     font-size: 12px;
     padding: 5px 12px;
@@ -597,6 +641,11 @@
   .footer a { color: var(--primary); text-decoration: none; }
 
   .loading { opacity: 0.5; transition: opacity 0.3s; }
+
+  /* ตัดส่วนที่ไม่จำเป็นสำหรับหน้าผู้บริหาร */
+  .likert-legend, .recommendations-panel { display: none !important; }
+  .panel-subtitle { margin-bottom: 14px; }
+  .kpi-sub { line-height: 1.45; }
 </style>
 </head>
 <body>
@@ -605,11 +654,12 @@
   <!-- ============ Header ============ -->
   <header class="header">
     <img class="header-banner" src="okrs-hero-banner.jpg" alt="สัมมนาผู้บริหาร สตง. ประจำปีงบประมาณ พ.ศ. 2570 — การกำหนดนโยบายเพื่อการจัดทำแผนการตรวจสอบและแผนปฏิบัติราชการ ด้วยหลักการ OKRs">
+    <div class="tech-light-layer" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
     <div class="header-meta">
       <div><span>วันที่จัดสัมมนา</span><span>1 – 3 กรกฎาคม 2569</span></div>
       <div><span>สถานที่</span><span>โรงแรมลาโค่ เขาใหญ่ จ.นครราชสีมา</span></div>
-      <div><span>สถานะ</span><span id="status-label"><span class="live-dot"></span>กำลังโหลด...</span></div>
-      <div><span>อัปเดต</span><span id="updated-at">—</span></div>
+      <div><span>อัปเดตข้อมูล</span><span id="updated-at">—</span></div>
+      <span id="status-label" style="display:none"></span>
       <div class="header-actions">
         <button class="btn" id="btn-live" onclick="setMode('live')" title="โหลดข้อมูลจริงจาก Google Sheet">📊 ข้อมูลจริง</button>
         <button class="btn" id="btn-demo" onclick="setMode('demo')" title="ใช้ข้อมูลตัวอย่างจาก mock-data.json">🎲 ตัวอย่าง</button>
@@ -622,14 +672,14 @@
 
   <!-- ============ Mode Banner ============ -->
   <div class="mode-banner" id="mode-banner">
-    <strong>🎲 โหมดตัวอย่าง (Demo Mode):</strong> <span id="mode-banner-text">กำลังแสดงข้อมูลจำลอง 40 ชุดจากไฟล์ <code>mock-data.json</code> เพื่อทดสอบหน้าจอ — ไม่กระทบข้อมูลจริงใน Google Sheet</span>
+    <strong>🎲 ข้อมูลตัวอย่าง:</strong> <span id="mode-banner-text">กำลังแสดงข้อมูลจำลอง 40 ชุดจากไฟล์ <code>mock-data.json</code> เพื่อทดสอบหน้าจอ — ไม่กระทบข้อมูลจริงใน Google Sheet</span>
   </div>
 
   <!-- ============ Executive Summary ============ -->
   <section class="exec-summary">
     <div class="exec-summary-icon">📋</div>
     <div class="exec-summary-content">
-      <div class="exec-summary-eyebrow">EXECUTIVE SUMMARY — สรุปผลระดับผู้บริหาร</div>
+      
       <div class="exec-summary-text" id="exec-summary-text"><span style="opacity: 0.4;">— ประมวลผลข้อมูล —</span></div>
       <div class="exec-summary-chips" id="exec-summary-chips"></div>
     </div>
@@ -637,7 +687,7 @@
 
   <!-- ============ Likert Legend ============ -->
   <div class="likert-legend">
-    <span class="likert-legend-title">เกณฑ์การแปลผลคะแนน (Likert 5 ระดับ):</span>
+    <span class="likert-legend-title">เกณฑ์คะแนน:</span>
     <span class="legend-item"><span class="legend-swatch" style="background: var(--likert-5)"></span>4.51–5.00 มากที่สุด</span>
     <span class="legend-item"><span class="legend-swatch" style="background: var(--likert-4)"></span>3.51–4.50 มาก</span>
     <span class="legend-item"><span class="legend-swatch" style="background: var(--likert-3)"></span>2.51–3.50 ปานกลาง</span>
@@ -647,8 +697,8 @@
 
   <!-- ============ Hero: Pre/Post ============ -->
   <section class="hero">
-    <div class="section-label">ผลลัพธ์การเรียนรู้</div>
-    <h2 class="section-title">ระดับความรู้ความเข้าใจในเรื่อง SAO OKRs</h2>
+    <div class="section-label">ก่อน–หลังสัมมนา</div>
+    <h2 class="section-title">ความรู้ความเข้าใจเกี่ยวกับ SAO OKRs</h2>
     <div class="prepost">
       <div class="prepost-side">
         <div class="label">ก่อนสัมมนา</div>
@@ -685,28 +735,28 @@
     </div>
     <div class="kpi">
       <div class="kpi-accent"></div>
-      <div class="kpi-label">พึงพอใจระดับ "มาก" ขึ้นไป</div>
+      <div class="kpi-label">คำตอบระดับ “มาก” ขึ้นไป</div>
       <div class="kpi-value"><span id="kpi-satisfied">—</span><span class="kpi-suffix">%</span></div>
-      <div class="kpi-sub">ตอบ 4 หรือ 5 จากทุกข้อ</div>
+      <div class="kpi-sub">ระดับ 4–5 จากทุกข้อ</div>
     </div>
     <div class="kpi kpi-highlight">
       <div class="kpi-accent"></div>
-      <div class="kpi-label">ความรู้ SAO OKRs เพิ่มขึ้น</div>
+      <div class="kpi-label">ความรู้ความเข้าใจเพิ่มขึ้น</div>
       <div class="kpi-value" style="color: var(--gold);"><span id="kpi-delta-pct">—</span><span class="kpi-suffix">%</span></div>
-      <div class="kpi-sub">หลังการสัมมนา (Pre → Post)</div>
+      <div class="kpi-sub">ก่อนเทียบหลัง</div>
     </div>
   </section>
 
   <!-- ============ Top 3 / Bottom 3 Insights ============ -->
   <section class="insights-grid">
     <div class="panel insight-panel insight-top">
-      <div class="panel-title">⭐ 3 อันดับที่ทำได้ดีที่สุด</div>
-      <div class="panel-subtitle">จุดเด่นที่ควรรักษาไว้และต่อยอด</div>
+      <div class="panel-title">จุดเด่น</div>
+      <div class="panel-subtitle">รายการที่ได้คะแนนสูง</div>
       <div id="top-items" class="insight-list"></div>
     </div>
     <div class="panel insight-panel insight-bottom">
-      <div class="panel-title">⚠️ 3 อันดับที่ควรพัฒนา</div>
-      <div class="panel-subtitle">ประเด็นที่ควรปรับปรุงในการจัดครั้งถัดไป</div>
+      <div class="panel-title">ควรพัฒนา</div>
+      <div class="panel-subtitle">รายการที่ได้คะแนนต่ำกว่าเรื่องอื่น</div>
       <div id="bottom-items" class="insight-list"></div>
     </div>
   </section>
@@ -715,27 +765,27 @@
   <section class="chart-grid">
     <div class="panel">
       <div class="panel-title">คะแนนเฉลี่ยรายด้าน</div>
-      <div class="panel-subtitle">เปรียบเทียบ 4 ด้านการประเมิน (เนื้อหา • นำไปใช้ • บริหาร • วัตถุประสงค์)</div>
+      <div class="panel-subtitle">เปรียบเทียบ 4 ด้านการประเมิน</div>
       <div class="chart-box"><canvas id="chart-areas"></canvas></div>
     </div>
     <div class="panel">
       <div class="panel-title">สังกัดของผู้ตอบ</div>
-      <div class="panel-subtitle">กระจายตามหน่วยงาน</div>
+      <div class="panel-subtitle">จำแนกตามหน่วยงาน</div>
       <div class="chart-box"><canvas id="chart-affiliation"></canvas></div>
     </div>
   </section>
 
   <!-- ============ Distribution ============ -->
   <section class="panel" style="margin-bottom: 24px;">
-    <div class="panel-title">การกระจายระดับคะแนนตามด้านการประเมิน</div>
-    <div class="panel-subtitle">สัดส่วนของคำตอบระดับ 1-5 ในแต่ละด้าน — ด้านที่มีสีแดง/ส้มมาก คือด้านที่ควรพัฒนา</div>
+    <div class="panel-title">สัดส่วนระดับคะแนน</div>
+    <div class="panel-subtitle">แสดงคำตอบระดับ 1–5 ในแต่ละด้าน</div>
     <div class="chart-box tall"><canvas id="chart-distribution"></canvas></div>
   </section>
 
   <!-- ============ Recommendations ============ -->
   <section class="panel recommendations-panel" style="margin-bottom: 24px;">
-    <div class="panel-title">💡 ข้อเสนอแนะเชิงนโยบาย (Key Recommendations)</div>
-    <div class="panel-subtitle">สรุปประเด็นสำคัญและข้อเสนอต่อผู้บริหารสำหรับการตัดสินใจครั้งถัดไป</div>
+    <div class="panel-title">ข้อพิจารณา</div>
+    <div class="panel-subtitle">สรุปเฉพาะประเด็นที่ควรนำไปใช้ต่อ</div>
     <div class="recommendations-content" id="recommendations-content">
       <ul>
         <li id="rec-item-1">—</li>
@@ -747,25 +797,25 @@
 
   <!-- ============ Detail bars ============ -->
   <section class="panel" style="margin-bottom: 24px;">
-    <div class="panel-title">คะแนนรายข้อทั้งหมด (22 ข้อ)</div>
-    <div class="panel-subtitle">คะแนนเฉลี่ยทุกข้อ จัดกลุ่มตามด้านการประเมิน • hover เพื่อดูข้อความเต็ม</div>
+    <div class="panel-title">คะแนนรายข้อ</div>
+    <div class="panel-subtitle">เรียงตามคะแนนในแต่ละด้าน</div>
     <div id="detail-bars"></div>
   </section>
 
   <!-- ============ Open-ended ============ -->
   <section class="panel">
-    <div class="panel-title">ข้อเสนอแนะและความคิดเห็นปลายเปิด</div>
-    <div class="panel-subtitle">สรุปประเด็นหลักที่ผู้เข้าร่วมกล่าวถึง พร้อมความคิดเห็นทั้งหมด</div>
+    <div class="panel-title">ความคิดเห็นปลายเปิด</div>
+    <div class="panel-subtitle">ข้อความจากผู้ตอบแบบประเมิน</div>
     <div class="comments-grid">
       <div>
-        <div class="detail-section-title">สิ่งที่เป็นประโยชน์มากที่สุด / นำไปประยุกต์ใช้ได้ <span id="count-benefit" style="color: var(--text-soft); font-weight: 400;"></span></div>
-        <div class="themes-title">🏷️ ประเด็นหลักที่กล่าวถึง</div>
+        <div class="detail-section-title">ประโยชน์ที่ได้รับ / การนำไปใช้ <span id="count-benefit" style="color: var(--text-soft); font-weight: 400;"></span></div>
+        <div class="themes-title">ประเด็นหลัก</div>
         <div class="themes-list" id="themes-benefit"></div>
         <div class="comment-list" id="comments-benefit"></div>
       </div>
       <div>
-        <div class="detail-section-title">ข้อเสนอแนะอื่น ๆ <span id="count-suggestion" style="color: var(--text-soft); font-weight: 400;"></span></div>
-        <div class="themes-title">🏷️ ประเด็นหลักที่ควรพิจารณา</div>
+        <div class="detail-section-title">ข้อเสนอแนะ <span id="count-suggestion" style="color: var(--text-soft); font-weight: 400;"></span></div>
+        <div class="themes-title">ประเด็นหลัก</div>
         <div class="themes-list" id="themes-suggestion"></div>
         <div class="comment-list" id="comments-suggestion"></div>
       </div>
@@ -773,7 +823,7 @@
   </section>
 
   <footer class="footer">
-    แดชบอร์ดประเมินผลโครงการ • พัฒนาโดย นายรังสรรค์ สินนา (เดียร์) • สำนักงานการตรวจเงินแผ่นดิน
+    ผลประเมินโครงการสัมมนามอบนโยบาย OKRs 2570
   </footer>
 
 </div>
@@ -947,8 +997,8 @@ function showBanner(show, text) {
   if (text) document.getElementById('mode-banner-text').innerHTML = text;
   const status = document.getElementById('status-label');
   status.innerHTML = show
-    ? '<span class="live-dot demo-dot"></span>DEMO'
-    : '<span class="live-dot"></span>LIVE';
+    ? '<span class="live-dot demo-dot"></span>ข้อมูลตัวอย่าง'
+    : '<span class="live-dot"></span>ข้อมูลจริง';
 }
 
 // ============================================================
@@ -1050,7 +1100,7 @@ function render(rows) {
 
   // KPIs
   document.getElementById('kpi-respondents').textContent = a.n;
-  document.getElementById('kpi-respondents-sub').textContent = `จากทั้งหมด ${a.n} คน`;
+  document.getElementById('kpi-respondents-sub').textContent = `จากผู้ตอบแบบประเมิน ${a.n} คน`;
   document.getElementById('kpi-overall').textContent = a.overall.toFixed(2);
   applyLikertTag('kpi-overall-tag', a.overall);
   document.getElementById('kpi-satisfied').textContent = a.satisfiedPct.toFixed(1);
@@ -1087,15 +1137,15 @@ function renderExecutiveSummary(a) {
   const lvl = likertLevel(a.overall);
   const deltaPct = a.knowBefore > 0 ? ((a.knowAfter - a.knowBefore) / a.knowBefore * 100) : 0;
 
-  // Top-line auto-generated sentence
-  const text = `โครงการบรรลุวัตถุประสงค์ในระดับ <strong style="color: ${lvl.hex}">${lvl.label}</strong> ที่คะแนนเฉลี่ย <strong>${a.overall.toFixed(2)}/5</strong> โดย <strong>${a.satisfiedPct.toFixed(0)}%</strong> ของผู้ตอบให้คะแนนตั้งแต่ระดับ "มาก" ขึ้นไป — ผู้เข้าร่วมมีความรู้ความเข้าใจเกี่ยวกับ SAO OKRs เพิ่มขึ้น <strong>${deltaPct.toFixed(0)}%</strong> หลังการสัมมนา`;
+  const sampleNote = a.n < 10 ? ' <span style="color: var(--text-mid);">(ข้อมูลยังมีจำนวนน้อย)</span>' : '';
+  const text = `คะแนนเฉลี่ยรวม <strong>${a.overall.toFixed(2)}/5</strong> อยู่ในระดับ <strong style="color: ${lvl.hex}">${lvl.label}</strong> คำตอบระดับมากขึ้นไป <strong>${a.satisfiedPct.toFixed(0)}%</strong> และความรู้ความเข้าใจเกี่ยวกับ SAO OKRs เพิ่มขึ้น <strong>${deltaPct.toFixed(0)}%</strong>${sampleNote}`;
   document.getElementById('exec-summary-text').innerHTML = text;
 
   // Actionable chips
   const chips = [
-    { label: '👥 ผู้ตอบ', value: `${a.n} คน` },
-    { label: '⭐ จุดเด่น', value: `${a.highest.short} (${a.highest.score.toFixed(2)})` },
-    { label: '⚠️ ควรพัฒนา', value: `${a.lowest.short} (${a.lowest.score.toFixed(2)})` },
+    { label: 'ผู้ตอบแบบประเมิน', value: `${a.n} คน` },
+    { label: 'จุดเด่น', value: `${a.highest.short} (${a.highest.score.toFixed(2)})` },
+    { label: 'ควรพัฒนา', value: `${a.lowest.short} (${a.lowest.score.toFixed(2)})` },
   ];
   document.getElementById('exec-summary-chips').innerHTML =
     chips.map(c => `<span class="exec-chip">${c.label}<strong>${escapeHtml(c.value)}</strong></span>`).join('');
@@ -1253,9 +1303,9 @@ function renderRecommendations(a) {
   const deltaPct = a.knowBefore > 0 ? ((a.knowAfter - a.knowBefore) / a.knowBefore * 100) : 0;
 
   const recs = [
-    `<strong>ผลสัมฤทธิ์:</strong> โครงการบรรลุวัตถุประสงค์ในระดับ <strong>${lvl.label}</strong> (${a.overall.toFixed(2)}/5) โดยผู้เข้าร่วมมีความรู้เกี่ยวกับ SAO OKRs เพิ่มขึ้น <strong>${deltaPct.toFixed(0)}%</strong> สะท้อนความพร้อมในการนำไปใช้จัดทำแผนการตรวจสอบและแผนปฏิบัติราชการ ประจำปีงบประมาณ พ.ศ. 2570`,
-    `<strong>จุดแข็งที่ควรรักษาไว้:</strong> "${top.short}" (${top.score.toFixed(2)}) เป็นจุดที่ผู้เข้าร่วมประเมินสูงสุด แนะนำให้คงแนวปฏิบัติเดิมไว้และต่อยอดในโครงการครั้งถัดไป`,
-    `<strong>ประเด็นที่ต้องปรับปรุง:</strong> "${bottom.short}" (${bottom.score.toFixed(2)}) ได้คะแนนต่ำที่สุด ผู้บริหารควรมอบหมายให้ทีมงานพิจารณาแนวทางแก้ไขสำหรับการจัดครั้งถัดไป`,
+    `<strong>ผลการประเมินโดยรวม:</strong> โครงการได้รับคะแนนเฉลี่ยระดับ <strong>${lvl.label}</strong> (${a.overall.toFixed(2)}/5) และผู้เข้าร่วมมีความรู้เกี่ยวกับ SAO OKRs เพิ่มขึ้น <strong>${deltaPct.toFixed(0)}%</strong> ข้อมูลนี้สามารถใช้ประกอบการวางแผนจัดทำแผนการตรวจสอบและแผนปฏิบัติราชการ ประจำปีงบประมาณ พ.ศ. 2570`,
+    `<strong>จุดเด่นที่ควรรักษาไว้:</strong> “${top.short}” (${top.score.toFixed(2)}) เป็นประเด็นที่ได้รับคะแนนสูงสุด ควรรักษามาตรฐานและนำไปเป็นแนวทางในการจัดกิจกรรมครั้งต่อไป`,
+    `<strong>ประเด็นหลักเพิ่มเติม:</strong> “${bottom.short}” (${bottom.score.toFixed(2)}) เป็นประเด็นที่มีคะแนนต่ำสุด ควรนำไปพิจารณาปรับปรุงรูปแบบหรือกระบวนการดำเนินงานในครั้งถัดไป`,
   ];
   document.getElementById('rec-item-1').innerHTML = recs[0];
   document.getElementById('rec-item-2').innerHTML = recs[1];

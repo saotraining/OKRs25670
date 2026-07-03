@@ -751,15 +751,15 @@
     </div>
   </section>
 
-  <!-- ============ Top 3 / Bottom 3 Insights ============ -->
-  <section class="insights-grid">
+  <!-- ============ Highest / Watch Items ============ -->
+  <section class="insights-grid" id="insights-section">
     <div class="panel insight-panel insight-top">
-      <div class="panel-title">จุดเด่น</div>
+      <div class="panel-title">คะแนนสูงสุด</div>
       <div class="panel-subtitle"></div>
       <div id="top-items" class="insight-list"></div>
     </div>
     <div class="panel insight-panel insight-bottom">
-      <div class="panel-title">ควรพัฒนา</div>
+      <div class="panel-title">คะแนนที่ควรติดตาม</div>
       <div class="panel-subtitle"></div>
       <div id="bottom-items" class="insight-list"></div>
     </div>
@@ -1106,8 +1106,10 @@ function render(rows) {
   document.getElementById('kpi-delta-pct').textContent = (pct >= 0 ? '+' : '') + pct.toFixed(0);
 
 
-  // Top 3 / Bottom 3 Insights
-  renderTopBottom(a.allItems);
+  // คะแนนสูงสุด / คะแนนที่ควรติดตาม
+  const insightsSection = document.getElementById('insights-section');
+  if (insightsSection) insightsSection.style.display = a.n < 5 ? 'none' : '';
+  if (a.n >= 5) renderTopBottom(a.allItems);
 
 
   // Updated time
@@ -1137,8 +1139,8 @@ function renderExecutiveSummary(a) {
   // Actionable chips
   const chips = [
     { label: 'ผู้ตอบแบบประเมิน', value: `${a.n} คน` },
-    { label: 'จุดเด่น', value: `${a.highest.short} (${a.highest.score.toFixed(2)})` },
-    { label: 'ควรพัฒนา', value: `${a.lowest.short} (${a.lowest.score.toFixed(2)})` },
+    { label: 'คะแนนสูงสุด', value: `${a.highest.short} (${a.highest.score.toFixed(2)})` },
+    { label: 'ควรติดตาม', value: `${a.lowest.short} (${a.lowest.score.toFixed(2)})` },
   ];
   document.getElementById('exec-summary-chips').innerHTML =
     chips.map(c => `<span class="exec-chip">${c.label}<strong>${escapeHtml(c.value)}</strong></span>`).join('');
@@ -1297,7 +1299,7 @@ function renderRecommendations(a) {
 
   const recs = [
     `<strong>ผลการประเมินโดยรวม:</strong> โครงการได้รับคะแนนเฉลี่ยระดับ <strong>${lvl.label}</strong> (${a.overall.toFixed(2)}/5) และผู้เข้าร่วมมีความรู้เกี่ยวกับ SAO OKRs เพิ่มขึ้น <strong>${deltaPct.toFixed(0)}%</strong> ข้อมูลนี้สามารถใช้ประกอบการวางแผนจัดทำแผนการตรวจสอบและแผนปฏิบัติราชการ ประจำปีงบประมาณ พ.ศ. 2570`,
-    `<strong>จุดเด่นที่ควรรักษาไว้:</strong> “${top.short}” (${top.score.toFixed(2)}) เป็นประเด็นที่ได้รับคะแนนสูงสุด ควรรักษามาตรฐานและนำไปเป็นแนวทางในการจัดกิจกรรมครั้งต่อไป`,
+    `<strong>คะแนนสูงสุด:</strong> “${top.short}” (${top.score.toFixed(2)}) เป็นประเด็นที่ได้รับคะแนนสูงสุด ควรรักษามาตรฐานและนำไปเป็นแนวทางในการจัดกิจกรรมครั้งต่อไป`,
     `<strong>ประเด็นหลักเพิ่มเติม:</strong> “${bottom.short}” (${bottom.score.toFixed(2)}) เป็นประเด็นที่มีคะแนนต่ำสุด ควรนำไปพิจารณาปรับปรุงรูปแบบหรือกระบวนการดำเนินงานในครั้งถัดไป`,
   ];
   document.getElementById('rec-item-1').innerHTML = recs[0];

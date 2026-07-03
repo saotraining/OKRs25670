@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แดชบอร์ดผลประเมิน — สัมมนามอบนโยบาย OKRs 2570</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<style>
+  :root {
+    --bg: #F4F8FC;
+    --card: #FFFFFF;
+    --navy: #0A2540;
+    --primary: #0077B6;
+    --primary-soft: #E6F0FA;
+    --gold: #D4A017;
+    --gold-soft: #FFF5DC;
+    --text: #1A2332;
+    --text-mid: #5A6776;
+    --text-soft: #94A3B8;
+    --border: #E2E8F0;
+    /* Likert interpretation colors */
+    --likert-5: #059669;     /* มากที่สุด — เขียวเข้ม */
+    --likert-4: #10B981;     /* มาก — เขียวกลาง */
+    --likert-3: #F59E0B;     /* ปานกลาง — เหลือง */
+    --likert-2: #F97316;     /* น้อย — ส้ม */
+    --likert-1: #DC2626;     /* น้อยที่สุด — แดง */
+    --shadow: 0 1px 3px rgba(10,37,64,0.04), 0 4px 12px rgba(10,37,64,0.04);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: 'Sarabun', sans-serif; line-height: 1.5; }
+  body { min-height: 100vh; padding: 24px 16px 48px; }
+  .container { max-width: 1280px; margin: 0 auto; }
+
+  /* ============ Header ============ */
+  .header {
+    background: white;
+    color: var(--text);
+    border-radius: 16px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+  .header-banner {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1600 / 685;
+    object-fit: cover;
+  }
+  .header-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 28px;
+    align-items: center;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--primary) 100%);
+    color: white;
+    font-size: 13px;
+  }
+  .header-meta div span:first-child {
+    display: block;
+    opacity: 0.65;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .header-meta div span:last-child {
+    font-family: 'Prompt', sans-serif;
+    font-weight: 500;
+  }
+  .live-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--likert-4);
+    border-radius: 50%;
+    margin-right: 6px;
+    animation: pulse 2s infinite;
+    vertical-align: middle;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+  .demo-dot { background: var(--gold); }
+
+  .header-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .btn {
+    background: rgba(255,255,255,0.12);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn:hover { background: rgba(255,255,255,0.22); }
+  .btn:active { transform: scale(0.97); }
+  .btn.active { background: var(--gold); border-color: var(--gold); color: var(--navy); font-weight: 600; }
+
+  /* ============ Mode banner ============ */
+  .mode-banner {
+    display: none;
+    background: var(--gold-soft);
+    border: 1px solid var(--gold);
+    border-left: 4px solid var(--gold);
+    color: #8B6914;
+    padding: 12px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+  .mode-banner.show { display: block; }
+  .mode-banner strong { font-family: 'Prompt', sans-serif; }
+
+  /* ============ Hero: Pre/Post ============ */
+  .hero {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 32px 36px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+  .section-label {
+    font-family: 'Prompt', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin-bottom: 4px;
+  }
+  .section-title {
+    font-family: 'Prompt', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 24px;
+  }
+  .prepost {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 32px;
+  }
+  .prepost-side { text-align: center; }
+  .prepost-side .label {
+    font-family: 'Prompt', sans-serif;
+    font-size: 13px;
+    color: var(--text-mid);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+  }
+  .prepost-side .value {
+    font-family: 'Prompt', sans-serif;
+    font-size: 64px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1;
+  }
+  .prepost-side .of5 {
+    font-size: 24px;
+    color: var(--text-soft);
+    font-weight: 400;
+  }
+  .prepost-side .scale {
+    font-size: 12px;
+    color: var(--text-soft);
+    margin-top: 8px;
+  }
+  .likert-tag {
+    display: inline-block;
+    font-family: 'Prompt', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 999px;
+    margin-top: 6px;
+  }
+  .prepost-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .prepost-arrow svg { color: var(--gold); }
+  .prepost-delta {
+    background: var(--gold-soft);
+    color: var(--gold);
+    font-family: 'Prompt', sans-serif;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 999px;
+    font-size: 14px;
+  }
+  @media (max-width: 640px) {
+    .prepost { grid-template-columns: 1fr; gap: 16px; }
+    .prepost-arrow svg { transform: rotate(90deg); }
+    .prepost-side .value { font-size: 48px; }
+  }
+
+  /* ============ KPI cards ============ */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .kpi {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 20px 22px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi-accent {
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--primary);
+  }
+  .kpi:nth-child(2) .kpi-accent { background: var(--gold); }
+  .kpi:nth-child(3) .kpi-accent { background: var(--likert-4); }
+  .kpi:nth-child(4) .kpi-accent { background: var(--navy); }
+  .kpi-label {
+    font-size: 12px;
+    color: var(--text-mid);
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .kpi-value {
+    font-family: 'Prompt', sans-serif;
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.1;
+  }
+  .kpi-suffix {
+    font-size: 18px;
+    color: var(--text-soft);
+    margin-left: 4px;
+    font-weight: 400;
+  }
+  .kpi-sub {
+    font-size: 11px;
+    color: var(--text-soft);
+    margin-top: 6px;
+  }
+
+  /* ============ Executive Summary ============ */
+  .exec-summary {
+    background: linear-gradient(135deg, #FFFFFF 0%, var(--primary-soft) 100%);
+    border-left: 5px solid var(--primary);
+    border-radius: 14px;
+    padding: 22px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    box-shadow: var(--shadow);
+  }
+  .exec-summary-icon {
+    font-size: 42px;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .exec-summary-content { flex: 1; min-width: 0; }
+  .exec-summary-eyebrow {
+    font-family: 'Prompt', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--primary);
+    margin-bottom: 6px;
+  }
+  .exec-summary-text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .exec-summary-text strong {
+    color: var(--navy);
+    font-family: 'Prompt', sans-serif;
+    font-weight: 600;
+  }
+  .exec-summary-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .exec-chip {
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: white;
+    border: 1px solid var(--border);
+    color: var(--text-mid);
+  }
+  .exec-chip strong {
+    color: var(--navy);
+    margin-left: 4px;
+  }
+  @media (max-width: 640px) {
+    .exec-summary { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .exec-summary-icon { font-size: 32px; }
+    .exec-summary-text { font-size: 14px; }
+  }
+
+  /* ============ Likert legend ============ */
+  .likert-legend {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 14px 20px;
+    margin-bottom: 24px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    font-size: 12px;
+  }
+  .likert-legend-title {
+    font-family: 'Prompt', sans-serif;
+    font-weight: 600;
+    color: var(--text-mid);
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-mid);
+  }
+  .legend-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+  }
+
+  /* ============ Chart grid ============ */
+  .chart-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 900px) { .chart-grid { grid-template-columns: 1fr; } }
+  .panel {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 24px 26px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+  .panel-title {
+    font-family: 'Prompt', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+  .panel-subtitle {
+    font-size: 12px;
+    color: var(--text-mid);
+    margin-bottom: 18px;
+  }
+  .chart-box { position: relative; height: 320px; }
+  .chart-box.tall { height: 360px; }
+
+  /* ============ Detail bars ============ */
+  .detail-section { margin-bottom: 28px; }
+  .detail-section:last-child { margin-bottom: 0; }
+  .detail-section-title {
+    font-family: 'Prompt', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--primary-soft);
+  }
+  .detail-item {
+    display: grid;
+    grid-template-columns: 1fr 220px 60px 70px;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    font-size: 13px;
+  }
+  @media (max-width: 640px) {
+    .detail-item { grid-template-columns: 1fr 60px 60px; gap: 8px; font-size: 12px; }
+    .detail-item .detail-bar-wrap { display: none; }
+  }
+  .detail-label { color: var(--text); }
+  .detail-bar-wrap {
+    height: 8px;
+    background: var(--primary-soft);
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+  }
+  .detail-bar {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .detail-score {
+    font-family: 'Prompt', sans-serif;
+    font-weight: 600;
+    color: var(--navy);
+    text-align: right;
+    font-size: 14px;
+  }
+  .likert-tag.small {
+    font-size: 10px;
+    padding: 2px 8px;
+    text-align: center;
+  }
+
+  /* ============ Comments ============ */
+  .comments-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 900px) { .comments-grid { grid-template-columns: 1fr; } }
+  .comment-list {
+    max-height: 360px;
+    overflow-y: auto;
+    padding-right: 6px;
+  }
+  .comment-list::-webkit-scrollbar { width: 6px; }
+  .comment-list::-webkit-scrollbar-track { background: var(--bg); }
+  .comment-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 999px; }
+  .comment-item {
+    background: var(--primary-soft);
+    border-left: 3px solid var(--primary);
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+  .comment-empty {
+    color: var(--text-soft);
+    font-size: 13px;
+    font-style: italic;
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  /* ============ Footer ============ */
+  .footer {
+    text-align: center;
+    color: var(--text-soft);
+    font-size: 12px;
+    margin-top: 32px;
+    padding: 16px;
+  }
+  .footer a { color: var(--primary); text-decoration: none; }
+
+  .loading { opacity: 0.5; transition: opacity 0.3s; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ============ Header ============ -->
+  <header class="header">
+    <img class="header-banner" src="okrs-hero-banner.jpg" alt="สัมมนาผู้บริหาร สตง. ประจำปีงบประมาณ พ.ศ. 2570 — การกำหนดนโยบายเพื่อการจัดทำแผนการตรวจสอบและแผนปฏิบัติราชการ ด้วยหลักการ OKRs">
+    <div class="header-meta">
+      <div><span>วันที่จัดสัมมนา</span><span>1 – 3 กรกฎาคม 2569</span></div>
+      <div><span>สถานที่</span><span>โรงแรมลาโค่ เขาใหญ่ จ.นครราชสีมา</span></div>
+      <div><span>สถานะ</span><span id="status-label"><span class="live-dot"></span>กำลังโหลด...</span></div>
+      <div><span>อัปเดต</span><span id="updated-at">—</span></div>
+      <div class="header-actions">
+        <button class="btn" id="btn-live" onclick="setMode('live')" title="โหลดข้อมูลจริงจาก Google Sheet">📊 ข้อมูลจริง</button>
+        <button class="btn" id="btn-demo" onclick="setMode('demo')" title="ใช้ข้อมูลตัวอย่างจาก mock-data.json">🎲 ตัวอย่าง</button>
+        <button class="btn" onclick="loadData()" title="โหลดข้อมูลอีกครั้ง">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ Mode Banner ============ -->
+  <div class="mode-banner" id="mode-banner">
+    <strong>🎲 โหมดตัวอย่าง (Demo Mode):</strong> <span id="mode-banner-text">กำลังแสดงข้อมูลจำลอง 40 ชุดจากไฟล์ <code>mock-data.json</code> เพื่อทดสอบหน้าจอ — ไม่กระทบข้อมูลจริงใน Google Sheet</span>
+  </div>
+
+  <!-- ============ Executive Summary ============ -->
+  <section class="exec-summary">
+    <div class="exec-summary-icon">📋</div>
+    <div class="exec-summary-content">
+      <div class="exec-summary-eyebrow">EXECUTIVE SUMMARY — สรุปผลระดับผู้บริหาร</div>
+      <div class="exec-summary-text" id="exec-summary-text">กำลังโหลดข้อมูล...</div>
+      <div class="exec-summary-chips" id="exec-summary-chips"></div>
+    </div>
+  </section>
+
+  <!-- ============ Likert Legend ============ -->
+  <div class="likert-legend">
+    <span class="likert-legend-title">เกณฑ์การแปลผลคะแนน (Likert 5 ระดับ):</span>
+    <span class="legend-item"><span class="legend-swatch" style="background: var(--likert-5)"></span>4.51–5.00 มากที่สุด</span>
+    <span class="legend-item"><span class="legend-swatch" style="background: var(--likert-4)"></span>3.51–4.50 มาก</span>
+    <span class="legend-item"><span class="legend-swatch" style="background: var(--likert-3)"></span>2.51–3.50 ปานกลาง</span>
+    <span class="legend-item"><span class="legend-swatch" style="background: var(--likert-2)"></span>1.51–2.50 น้อย</span>
+    <span class="legend-item"><span class="legend-swatch" style="background: var(--likert-1)"></span>1.00–1.50 น้อยที่สุด</span>
+  </div>
+
+  <!-- ============ Hero: Pre/Post ============ -->
+  <section class="hero">
+    <div class="section-label">หัวใจของโครงการ</div>
+    <h2 class="section-title">ระดับความรู้ความเข้าใจในเรื่อง OKRs</h2>
+    <div class="prepost">
+      <div class="prepost-side">
+        <div class="label">ก่อนสัมมนา</div>
+        <div class="value" id="pre-score">—<span class="of5">/5</span></div>
+        <div><span class="likert-tag" id="pre-tag">—</span></div>
+        <div class="scale">คะแนนเฉลี่ย</div>
+      </div>
+      <div class="prepost-arrow">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <div class="prepost-delta" id="prepost-delta">Δ —</div>
+      </div>
+      <div class="prepost-side">
+        <div class="label">หลังสัมมนา</div>
+        <div class="value" id="post-score">—<span class="of5">/5</span></div>
+        <div><span class="likert-tag" id="post-tag">—</span></div>
+        <div class="scale">เพิ่มขึ้น <span id="prepost-pct">—</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ KPI Cards ============ -->
+  <section class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-accent"></div>
+      <div class="kpi-label">จำนวนผู้ตอบแบบประเมิน</div>
+      <div class="kpi-value"><span id="kpi-respondents">—</span><span class="kpi-suffix">คน</span></div>
+      <div class="kpi-sub">จากเป้าหมาย ~70 คน</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-accent"></div>
+      <div class="kpi-label">คะแนนเฉลี่ยรวม</div>
+      <div class="kpi-value"><span id="kpi-overall">—</span><span class="kpi-suffix">/ 5</span></div>
+      <div class="kpi-sub"><span class="likert-tag small" id="kpi-overall-tag">—</span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-accent"></div>
+      <div class="kpi-label">% พึงพอใจระดับ "มาก" ขึ้นไป</div>
+      <div class="kpi-value"><span id="kpi-satisfied">—</span><span class="kpi-suffix">%</span></div>
+      <div class="kpi-sub">ตอบ 4 หรือ 5 จากทุกข้อ</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-accent"></div>
+      <div class="kpi-label">ข้อที่ควรพัฒนาที่สุด</div>
+      <div class="kpi-value" style="font-size: 15px; line-height: 1.3;" id="kpi-lowest-item">—</div>
+      <div class="kpi-sub"><span id="kpi-lowest-score">—</span> คะแนน</div>
+    </div>
+  </section>
+
+  <!-- ============ Chart Grid ============ -->
+  <section class="chart-grid">
+    <div class="panel">
+      <div class="panel-title">คะแนนเฉลี่ยรายด้าน</div>
+      <div class="panel-subtitle">เปรียบเทียบ 4 ด้านการประเมิน (เนื้อหา • นำไปใช้ • บริหาร • วัตถุประสงค์)</div>
+      <div class="chart-box"><canvas id="chart-areas"></canvas></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">สังกัดของผู้ตอบ</div>
+      <div class="panel-subtitle">กระจายตามหน่วยงาน</div>
+      <div class="chart-box"><canvas id="chart-affiliation"></canvas></div>
+    </div>
+  </section>
+
+  <!-- ============ Distribution ============ -->
+  <section class="panel" style="margin-bottom: 24px;">
+    <div class="panel-title">การกระจายระดับคะแนน (Rating Distribution)</div>
+    <div class="panel-subtitle">สัดส่วนของคำตอบในแต่ละระดับ 1-5 จากคำถาม Likert ทั้ง 20 ข้อ</div>
+    <div class="chart-box tall"><canvas id="chart-distribution"></canvas></div>
+  </section>
+
+  <!-- ============ Detail bars ============ -->
+  <section class="panel" style="margin-bottom: 24px;">
+    <div class="panel-title">คะแนนรายข้อทั้งหมด (20 ข้อ)</div>
+    <div class="panel-subtitle">คะแนนเฉลี่ยทุกข้อ จัดกลุ่มตามด้านการประเมิน พร้อมระดับการแปลผล</div>
+    <div id="detail-bars"></div>
+  </section>
+
+  <!-- ============ Open-ended ============ -->
+  <section class="panel">
+    <div class="panel-title">ข้อเสนอแนะและความคิดเห็นปลายเปิด</div>
+    <div class="panel-subtitle">เสียงจากผู้เข้าร่วมโครงการโดยตรง</div>
+    <div class="comments-grid">
+      <div>
+        <div class="detail-section-title">สิ่งที่เป็นประโยชน์มากที่สุด / นำไปประยุกต์ใช้ได้ <span id="count-benefit" style="color: var(--text-soft); font-weight: 400;"></span></div>
+        <div class="comment-list" id="comments-benefit"></div>
+      </div>
+      <div>
+        <div class="detail-section-title">ข้อเสนอแนะอื่น ๆ <span id="count-suggestion" style="color: var(--text-soft); font-weight: 400;"></span></div>
+        <div class="comment-list" id="comments-suggestion"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    แดชบอร์ดประเมินผลโครงการ • พัฒนาโดย นายรังสรรค์ สินนา (เดียร์) • สำนักงานการตรวจเงินแผ่นดิน
+  </footer>
+
+</div>
+
+<script>
+// ============================================================
+// CONFIGURATION
+// ============================================================
+const SHEET_ID = '1wOD3ex4thscZX4e3sf1qGqtykZN2HP_iX-VItMbBiEI';
+const GID = '0';
+const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}`;
+const MOCK_URL = 'mock-data.json';
+
+// Column index mapping (0-based) — ตามแบบประเมินฉบับปรับปรุง มิ.ย. 2569 (26 คอลัมน์)
+const COL = {
+  timestamp: 0, affiliation: 1,
+  knowBefore: 2, knowAfter: 3,
+  content:   [4, 5, 6, 7, 8],           // 5 ข้อ
+  apply:     [9, 10, 11],                // 3 ข้อ
+  manage:    [12, 13, 14, 15, 16, 17, 18], // 7 ข้อ
+  objective: [19, 20, 21, 22, 23],       // 5 ข้อ (เพิ่มจาก 3)
+  openBenefit: 24, openSuggestion: 25,
+};
+
+// Labels — short สำหรับกราฟ, full สำหรับ tooltip เมื่อ hover
+const LABELS = {
+  content: [
+    { short: 'สอดคล้องวัตถุประสงค์',      full: 'หัวข้อ/เนื้อหาการสัมมนามีความสอดคล้องกับวัตถุประสงค์โครงการ' },
+    { short: 'น่าสนใจ/ทันสมัย',           full: 'หัวข้อ/เนื้อหาการสัมมนามีความน่าสนใจและมีความทันสมัย' },
+    { short: 'ประเด็นสำคัญครบถ้วน',       full: 'หัวข้อ/เนื้อหาการสัมมนามีประเด็นสำคัญครบถ้วน' },
+    { short: 'ลำดับหัวข้อเหมาะสม',        full: 'การจัดลำดับหัวข้อ/เนื้อหาการสัมมนามีความเหมาะสม' },
+    { short: 'ตรงกับความคาดหวัง',         full: 'ในภาพรวมหัวข้อ/เนื้อหาการสัมมนาตรงกับความคาดหวัง' },
+  ],
+  apply: [
+    { short: 'ประยุกต์ใช้ปฏิบัติงานได้',   full: 'สามารถนำความรู้ไปประยุกต์ใช้ในการปฏิบัติงานได้' },
+    { short: 'เผยแพร่/แนะนำบุคลากรได้',   full: 'สามารถนำความรู้ไปเผยแพร่และให้คำแนะนำแก่บุคลากรในหน่วยงานได้' },
+    { short: 'ต่อยอดจากความรู้เดิม',      full: 'สามารถนำความรู้ไปต่อยอดจากความรู้เดิมได้' },
+  ],
+  manage: [
+    { short: 'รูปแบบการจัดเหมาะสม',       full: 'รูปแบบของการจัดโครงการสัมมนามีความเหมาะสม' },
+    { short: 'วัน/ระยะเวลาเหมาะสม',       full: 'ความเหมาะสมของวันและระยะเวลาที่จัดโครงการ' },
+    { short: 'เจ้าหน้าที่อำนวยความสะดวก', full: 'การให้คำแนะนำและอำนวยความสะดวกของเจ้าหน้าที่โครงการ' },
+    { short: 'สถานที่จัดสัมมนาเหมาะสม',   full: 'สถานที่จัดการสัมมนามีความสะดวกและเหมาะสม' },
+    { short: 'สถานที่พักเหมาะสม',         full: 'สถานที่พักมีความสะดวกและเหมาะสม' },
+    { short: 'การเดินทางสะดวก',           full: 'การเดินทางมีความสะดวกและเหมาะสม' },
+    { short: 'ภาพรวมการบริหาร',           full: 'ในภาพรวมการบริหารจัดการโครงการ' },
+  ],
+  objective: [
+    { short: 'ร่วมกำหนดนโยบาย/ทิศทาง',    full: 'ร่วมกำหนดนโยบายและทิศทางการตรวจเงินแผ่นดิน เพื่อจัดทำแผนตรวจสอบและแผนปฏิบัติราชการ ปี 2570' },
+    { short: 'ร่วมกำหนด SAO OKRs องค์กร', full: 'ร่วมกันกำหนด SAO OKRs ระดับองค์กร เพื่อขับเคลื่อนนโยบายไปสู่การปฏิบัติและเชื่อมโยงทุกหน่วยงานสู่เป้าหมายเดียวกัน' },
+    { short: 'จัดทำแผนตรวจสอบ 2570',      full: 'ประกอบการจัดทำแผนตรวจสอบและแผนปฏิบัติราชการ ประจำปีงบประมาณ พ.ศ. 2570 เสนอต่อ คตง.' },
+    { short: 'ผู้บริหารเข้าใจตรงกัน',     full: 'สร้างความเข้าใจร่วมกันของผู้บริหารในการขับเคลื่อนนโยบายและเป้าหมายของ สตง. อย่างเป็นเอกภาพ' },
+    { short: 'เครื่องมือติดตาม/ประเมินผล', full: 'ใช้เป็นเครื่องมือในการบริหาร ควบคุม ติดตาม และประเมินผลการปฏิบัติงานของ สตง.' },
+  ],
+};
+
+const AREA_NAMES = ['เนื้อหาการสัมมนา', 'การนำไปใช้', 'การบริหารจัดการ', 'วัตถุประสงค์โครงการ'];
+
+// Likert interpretation
+function likertLevel(score) {
+  if (score >= 4.51) return { label: 'มากที่สุด', color: 'var(--likert-5)', hex: '#059669' };
+  if (score >= 3.51) return { label: 'มาก',       color: 'var(--likert-4)', hex: '#10B981' };
+  if (score >= 2.51) return { label: 'ปานกลาง',    color: 'var(--likert-3)', hex: '#F59E0B' };
+  if (score >= 1.51) return { label: 'น้อย',       color: 'var(--likert-2)', hex: '#F97316' };
+  return { label: 'น้อยที่สุด', color: 'var(--likert-1)', hex: '#DC2626' };
+}
+
+function applyLikertTag(elId, score) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const lvl = likertLevel(score);
+  el.textContent = lvl.label;
+  el.style.background = lvl.hex + '22';
+  el.style.color = lvl.hex;
+}
+
+// ============================================================
+// MODE: live | demo
+// ============================================================
+let currentMode = 'live';
+
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById('btn-live').classList.toggle('active', mode === 'live');
+  document.getElementById('btn-demo').classList.toggle('active', mode === 'demo');
+  loadData();
+}
+
+// Read URL param ?demo=1
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('demo') === '1') currentMode = 'demo';
+
+// ============================================================
+// DATA LOADING
+// ============================================================
+let chartArea = null, chartAff = null, chartDist = null;
+
+async function loadData() {
+  document.body.classList.add('loading');
+  document.getElementById('btn-live').classList.toggle('active', currentMode === 'live');
+  document.getElementById('btn-demo').classList.toggle('active', currentMode === 'demo');
+
+  let rows = null;
+  let isDemo = false;
+  let bannerText = '';
+
+  if (currentMode === 'demo') {
+    rows = await tryLoadMock();
+    isDemo = true;
+    bannerText = `กำลังแสดงข้อมูลจำลอง ${rows ? rows.length : 0} ชุดจากไฟล์ <code>mock-data.json</code> เพื่อทดสอบหน้าจอ — ไม่กระทบข้อมูลจริงใน Google Sheet`;
+  } else {
+    // Try live first
+    rows = await tryLoadLive();
+    if (!rows || rows.length === 0) {
+      console.log('Live data empty or unavailable, falling back to mock');
+      rows = await tryLoadMock();
+      isDemo = true;
+      bannerText = 'ไม่สามารถดึงข้อมูลจาก Google Sheet ได้ หรือยังไม่มีผู้ตอบแบบประเมิน — แสดงข้อมูลตัวอย่างแทน';
+    }
+  }
+
+  if (!rows || rows.length === 0) {
+    rows = [];
+    console.error('No data available at all');
+  }
+
+  showBanner(isDemo, bannerText);
+  render(rows);
+  document.body.classList.remove('loading');
+}
+
+async function tryLoadLive() {
+  try {
+    const r = await fetch(CSV_URL, { cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const csv = await r.text();
+    const parsed = Papa.parse(csv, { skipEmptyLines: true });
+    return parsed.data.slice(1).filter(row => row.length > 5 && row[COL.knowBefore]);
+  } catch (err) {
+    console.error('Live load failed:', err);
+    return null;
+  }
+}
+
+async function tryLoadMock() {
+  try {
+    const r = await fetch(MOCK_URL, { cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const j = await r.json();
+    return j.rows;
+  } catch (err) {
+    console.error('Mock load failed:', err);
+    return null;
+  }
+}
+
+function showBanner(show, text) {
+  const banner = document.getElementById('mode-banner');
+  banner.classList.toggle('show', show);
+  if (text) document.getElementById('mode-banner-text').innerHTML = text;
+  const status = document.getElementById('status-label');
+  status.innerHTML = show
+    ? '<span class="live-dot demo-dot"></span>DEMO'
+    : '<span class="live-dot"></span>LIVE';
+}
+
+// ============================================================
+// AGGREGATION
+// ============================================================
+function avg(arr) {
+  const nums = arr.map(Number).filter(n => !isNaN(n) && n > 0);
+  return nums.length ? nums.reduce((a, b) => a + b, 0) / nums.length : 0;
+}
+function colAvg(rows, col) { return avg(rows.map(r => Number(r[col]))); }
+
+function aggregate(rows) {
+  const n = rows.length;
+  const knowBefore = colAvg(rows, COL.knowBefore);
+  const knowAfter = colAvg(rows, COL.knowAfter);
+
+  const areaScores = {
+    content: avg(rows.flatMap(r => COL.content.map(c => Number(r[c])))),
+    apply: avg(rows.flatMap(r => COL.apply.map(c => Number(r[c])))),
+    manage: avg(rows.flatMap(r => COL.manage.map(c => Number(r[c])))),
+    objective: avg(rows.flatMap(r => COL.objective.map(c => Number(r[c])))),
+  };
+
+  const itemScores = {
+    content: COL.content.map(c => colAvg(rows, c)),
+    apply: COL.apply.map(c => colAvg(rows, c)),
+    manage: COL.manage.map(c => colAvg(rows, c)),
+    objective: COL.objective.map(c => colAvg(rows, c)),
+  };
+
+  const allLikert = [...COL.content, ...COL.apply, ...COL.manage, ...COL.objective];
+  const overall = avg(rows.flatMap(r => allLikert.map(c => Number(r[c]))));
+
+  const allRatings = rows.flatMap(r => allLikert.map(c => Number(r[c]))).filter(v => v > 0);
+  const satisfied = allRatings.filter(v => v >= 4).length;
+  const satisfiedPct = allRatings.length ? (satisfied / allRatings.length) * 100 : 0;
+
+  // Distribution: count of each rating 1-5
+  const distribution = [0, 0, 0, 0, 0]; // index 0 = rating 1, etc
+  allRatings.forEach(v => {
+    if (v >= 1 && v <= 5) distribution[v - 1]++;
+  });
+
+  // Find highest & lowest items across all areas (สำหรับ Executive Summary + KPI)
+  const allItems = [];
+  ['content', 'apply', 'manage', 'objective'].forEach(area => {
+    LABELS[area].forEach((label, i) => {
+      allItems.push({ short: label.short, full: label.full, score: itemScores[area][i], area });
+    });
+  });
+  const lowest = allItems.reduce((min, x) => x.score < min.score ? x : min, allItems[0] || { short: '—', full: '', score: 0 });
+  const highest = allItems.reduce((max, x) => x.score > max.score ? x : max, allItems[0] || { short: '—', full: '', score: 0 });
+
+  // Affiliation
+  const affCount = {};
+  rows.forEach(r => {
+    const a = String(r[COL.affiliation] || '').trim() || 'ไม่ระบุ';
+    affCount[a] = (affCount[a] || 0) + 1;
+  });
+
+  const benefits = rows.map(r => String(r[COL.openBenefit] || '').trim()).filter(t => t.length > 1);
+  const suggestions = rows.map(r => String(r[COL.openSuggestion] || '').trim()).filter(t => t.length > 1);
+
+  return { n, knowBefore, knowAfter, areaScores, itemScores, overall, satisfiedPct, distribution, lowest, highest, affCount, benefits, suggestions };
+}
+
+// ============================================================
+// RENDERING
+// ============================================================
+function render(rows) {
+  if (rows.length === 0) {
+    document.getElementById('kpi-respondents').textContent = '0';
+    return;
+  }
+  const a = aggregate(rows);
+
+  // Hero: Pre/Post
+  document.getElementById('pre-score').innerHTML = a.knowBefore.toFixed(2) + '<span class="of5">/5</span>';
+  document.getElementById('post-score').innerHTML = a.knowAfter.toFixed(2) + '<span class="of5">/5</span>';
+  applyLikertTag('pre-tag', a.knowBefore);
+  applyLikertTag('post-tag', a.knowAfter);
+  const delta = a.knowAfter - a.knowBefore;
+  document.getElementById('prepost-delta').textContent = (delta >= 0 ? '+' : '') + delta.toFixed(2);
+  const pct = a.knowBefore > 0 ? (delta / a.knowBefore) * 100 : 0;
+  document.getElementById('prepost-pct').textContent = (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%';
+
+  // KPIs
+  document.getElementById('kpi-respondents').textContent = a.n;
+  document.getElementById('kpi-overall').textContent = a.overall.toFixed(2);
+  applyLikertTag('kpi-overall-tag', a.overall);
+  document.getElementById('kpi-satisfied').textContent = a.satisfiedPct.toFixed(1);
+  const kpiLowest = document.getElementById('kpi-lowest-item');
+  kpiLowest.textContent = a.lowest.short;
+  kpiLowest.title = a.lowest.full; // แสดง full text เมื่อ hover
+  document.getElementById('kpi-lowest-score').textContent = a.lowest.score.toFixed(2);
+
+  // Executive Summary — สร้างประโยคสรุปอัตโนมัติจากข้อมูล
+  renderExecutiveSummary(a);
+
+  // Updated time
+  document.getElementById('updated-at').textContent = new Date().toLocaleString('th-TH', {
+    day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
+  });
+
+  // Counts in comment headers
+  document.getElementById('count-benefit').textContent = `(${a.benefits.length})`;
+  document.getElementById('count-suggestion').textContent = `(${a.suggestions.length})`;
+
+  // Charts
+  renderAreaChart(a.areaScores);
+  renderAffiliationChart(a.affCount);
+  renderDistributionChart(a.distribution);
+  renderDetailBars(a.itemScores);
+  renderComments(a.benefits, a.suggestions);
+}
+
+function renderExecutiveSummary(a) {
+  const lvl = likertLevel(a.overall);
+  const deltaPct = a.knowBefore > 0 ? ((a.knowAfter - a.knowBefore) / a.knowBefore * 100) : 0;
+
+  // Top-line auto-generated sentence
+  const text = `โครงการบรรลุวัตถุประสงค์ในระดับ <strong style="color: ${lvl.hex}">${lvl.label}</strong> ที่คะแนนเฉลี่ย <strong>${a.overall.toFixed(2)}/5</strong> โดย <strong>${a.satisfiedPct.toFixed(0)}%</strong> ของผู้ตอบให้คะแนนตั้งแต่ระดับ "มาก" ขึ้นไป — ผู้เข้าร่วมมีความรู้ความเข้าใจเกี่ยวกับ SAO OKRs เพิ่มขึ้น <strong>${deltaPct.toFixed(0)}%</strong> หลังการสัมมนา`;
+  document.getElementById('exec-summary-text').innerHTML = text;
+
+  // Actionable chips
+  const chips = [
+    { label: '👥 ผู้ตอบ', value: `${a.n} คน` },
+    { label: '⭐ จุดเด่น', value: `${a.highest.short} (${a.highest.score.toFixed(2)})` },
+    { label: '⚠️ ควรพัฒนา', value: `${a.lowest.short} (${a.lowest.score.toFixed(2)})` },
+  ];
+  document.getElementById('exec-summary-chips').innerHTML =
+    chips.map(c => `<span class="exec-chip">${c.label}<strong>${escapeHtml(c.value)}</strong></span>`).join('');
+}
+
+function renderAreaChart(scores) {
+  if (chartArea) chartArea.destroy();
+  const vals = [scores.content, scores.apply, scores.manage, scores.objective];
+  const colors = vals.map(v => likertLevel(v).hex);
+  chartArea = new Chart(document.getElementById('chart-areas'), {
+    type: 'bar',
+    data: {
+      labels: AREA_NAMES,
+      datasets: [{
+        label: 'คะแนนเฉลี่ย',
+        data: vals,
+        backgroundColor: colors,
+        borderRadius: 8,
+        barThickness: 40,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: (c) => c.parsed.y.toFixed(2) + ' / 5 (' + likertLevel(c.parsed.y).label + ')' } }
+      },
+      scales: {
+        y: { beginAtZero: true, max: 5, ticks: { font: { family: 'Sarabun' } }, grid: { color: '#E2E8F0' } },
+        x: { ticks: { font: { family: 'Sarabun', size: 12 } }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+function renderAffiliationChart(affCount) {
+  if (chartAff) chartAff.destroy();
+  const entries = Object.entries(affCount).sort((a, b) => b[1] - a[1]);
+  const colors = ['#0077B6', '#0A2540', '#D4A017', '#10B981', '#7C3AED', '#EC4899', '#F59E0B', '#06B6D4'];
+  chartAff = new Chart(document.getElementById('chart-affiliation'), {
+    type: 'doughnut',
+    data: {
+      labels: entries.map(e => e[0]),
+      datasets: [{
+        data: entries.map(e => e[1]),
+        backgroundColor: colors.slice(0, entries.length),
+        borderColor: '#FFFFFF', borderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '60%',
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { family: 'Sarabun', size: 11 }, boxWidth: 12, padding: 8 } },
+        tooltip: { callbacks: { label: (c) => `${c.label}: ${c.parsed} คน` } }
+      }
+    }
+  });
+}
+
+function renderDistributionChart(dist) {
+  if (chartDist) chartDist.destroy();
+  const total = dist.reduce((a, b) => a + b, 0);
+  const pcts = dist.map(v => total ? (v / total) * 100 : 0);
+  chartDist = new Chart(document.getElementById('chart-distribution'), {
+    type: 'bar',
+    data: {
+      labels: ['1 — น้อยที่สุด', '2 — น้อย', '3 — ปานกลาง', '4 — มาก', '5 — มากที่สุด'],
+      datasets: [{
+        label: 'จำนวนคำตอบ',
+        data: dist,
+        backgroundColor: ['#DC2626', '#F97316', '#F59E0B', '#10B981', '#059669'],
+        borderRadius: 8,
+        barThickness: 60,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: (c) => `${c.parsed.x} คำตอบ (${pcts[c.dataIndex].toFixed(1)}%)` } }
+      },
+      scales: {
+        x: { beginAtZero: true, ticks: { font: { family: 'Sarabun' } }, grid: { color: '#E2E8F0' } },
+        y: { ticks: { font: { family: 'Sarabun', size: 13 } }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+function renderDetailBars(itemScores) {
+  const container = document.getElementById('detail-bars');
+  container.innerHTML = '';
+  const sections = [
+    { name: 'ด้านหัวข้อ/เนื้อหาการสัมมนา', labels: LABELS.content, scores: itemScores.content },
+    { name: 'ด้านการนำความรู้ไปใช้', labels: LABELS.apply, scores: itemScores.apply },
+    { name: 'ด้านการบริหารจัดการโครงการ', labels: LABELS.manage, scores: itemScores.manage },
+    { name: 'ด้านวัตถุประสงค์โครงการ', labels: LABELS.objective, scores: itemScores.objective },
+  ];
+  sections.forEach(sec => {
+    const div = document.createElement('div');
+    div.className = 'detail-section';
+    div.innerHTML = `<div class="detail-section-title">${sec.name} <span style="color: var(--text-soft); font-weight: 400; font-size: 11px;">(เรียงตามคะแนนสูง → ต่ำ)</span></div>`;
+    // จับ label กับ score รวมกันแล้ว sort จากคะแนนสูง → ต่ำ (professional dashboards มัก highlight ข้อดี/ข้อควรพัฒนาชัดเจน)
+    const items = sec.labels.map((lbl, i) => ({ ...lbl, score: sec.scores[i] }))
+      .sort((a, b) => b.score - a.score);
+    items.forEach(item => {
+      const lvl = likertLevel(item.score);
+      const width = (item.score / 5) * 100;
+      div.innerHTML += `
+        <div class="detail-item" title="${escapeHtml(item.full)}">
+          <div class="detail-label">${escapeHtml(item.short)}</div>
+          <div class="detail-bar-wrap"><div class="detail-bar" style="width:${width}%; background:${lvl.hex};"></div></div>
+          <div class="detail-score">${item.score.toFixed(2)}</div>
+          <div><span class="likert-tag small" style="background:${lvl.hex}22; color:${lvl.hex};">${lvl.label}</span></div>
+        </div>`;
+    });
+    container.appendChild(div);
+  });
+}
+
+function renderComments(benefits, suggestions) {
+  const renderList = (id, items) => {
+    const el = document.getElementById(id);
+    if (items.length === 0) {
+      el.innerHTML = '<div class="comment-empty">ยังไม่มีความคิดเห็น</div>';
+      return;
+    }
+    el.innerHTML = items.map(t => `<div class="comment-item">${escapeHtml(t)}</div>`).join('');
+  };
+  renderList('comments-benefit', benefits);
+  renderList('comments-suggestion', suggestions);
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// ============================================================
+// INIT
+// ============================================================
+loadData();
+setInterval(() => { if (currentMode === 'live') loadData(); }, 5 * 60 * 1000);
+</script>
+</body>
+</html>

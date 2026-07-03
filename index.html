@@ -211,6 +211,118 @@
     border-radius: 999px;
     font-size: 14px;
   }
+
+  /* ============ Insights Grid (Top 3 / Bottom 3) ============ */
+  .insights-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 900px) { .insights-grid { grid-template-columns: 1fr; } }
+  .insight-panel.insight-top { border-top: 4px solid var(--likert-5); }
+  .insight-panel.insight-bottom { border-top: 4px solid var(--likert-3); }
+  .insight-list { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+  .insight-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 12px;
+    background: var(--bg);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .insight-rank {
+    font-family: 'Prompt', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+  }
+  .insight-top .insight-rank { background: var(--likert-5); }
+  .insight-bottom .insight-rank { background: var(--likert-3); }
+  .insight-content { flex: 1; min-width: 0; }
+  .insight-label {
+    font-family: 'Prompt', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .insight-area {
+    font-size: 11px;
+    color: var(--text-soft);
+    margin-top: 2px;
+  }
+  .insight-score {
+    font-family: 'Prompt', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--navy);
+    flex-shrink: 0;
+  }
+  .insight-top .insight-score { color: var(--likert-5); }
+  .insight-bottom .insight-score { color: var(--likert-3); }
+
+  /* ============ Recommendations box ============ */
+  .recommendations-panel {
+    background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+    border-left: 5px solid var(--gold);
+  }
+  .recommendations-content {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--text);
+    padding: 8px 4px;
+  }
+  .recommendations-content ul { margin: 0; padding-left: 20px; }
+  .recommendations-content li { margin-bottom: 6px; }
+  .recommendations-content strong { color: var(--navy); font-family: 'Prompt', sans-serif; }
+
+  /* ============ Comment themes ============ */
+  .themes-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .theme-chip {
+    background: var(--primary-soft);
+    color: var(--primary);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-family: 'Prompt', sans-serif;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .theme-chip-count {
+    background: var(--primary);
+    color: white;
+    border-radius: 999px;
+    padding: 1px 8px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .themes-title {
+    font-size: 12px;
+    font-family: 'Prompt', sans-serif;
+    font-weight: 600;
+    color: var(--text-mid);
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
   @media (max-width: 640px) {
     .prepost { grid-template-columns: 1fr; gap: 16px; }
     .prepost-arrow svg { transform: rotate(90deg); }
@@ -518,7 +630,7 @@
     <div class="exec-summary-icon">📋</div>
     <div class="exec-summary-content">
       <div class="exec-summary-eyebrow">EXECUTIVE SUMMARY — สรุปผลระดับผู้บริหาร</div>
-      <div class="exec-summary-text" id="exec-summary-text">กำลังโหลดข้อมูล...</div>
+      <div class="exec-summary-text" id="exec-summary-text"><span style="opacity: 0.4;">— ประมวลผลข้อมูล —</span></div>
       <div class="exec-summary-chips" id="exec-summary-chips"></div>
     </div>
   </section>
@@ -535,8 +647,8 @@
 
   <!-- ============ Hero: Pre/Post ============ -->
   <section class="hero">
-    <div class="section-label">หัวใจของโครงการ</div>
-    <h2 class="section-title">ระดับความรู้ความเข้าใจในเรื่อง OKRs</h2>
+    <div class="section-label">ผลลัพธ์การเรียนรู้</div>
+    <h2 class="section-title">ระดับความรู้ความเข้าใจในเรื่อง SAO OKRs</h2>
     <div class="prepost">
       <div class="prepost-side">
         <div class="label">ก่อนสัมมนา</div>
@@ -561,9 +673,9 @@
   <section class="kpi-grid">
     <div class="kpi">
       <div class="kpi-accent"></div>
-      <div class="kpi-label">จำนวนผู้ตอบแบบประเมิน</div>
+      <div class="kpi-label">ผู้ตอบแบบประเมิน</div>
       <div class="kpi-value"><span id="kpi-respondents">—</span><span class="kpi-suffix">คน</span></div>
-      <div class="kpi-sub">จากเป้าหมาย ~70 คน</div>
+      <div class="kpi-sub" id="kpi-respondents-sub">—</div>
     </div>
     <div class="kpi">
       <div class="kpi-accent"></div>
@@ -573,15 +685,29 @@
     </div>
     <div class="kpi">
       <div class="kpi-accent"></div>
-      <div class="kpi-label">% พึงพอใจระดับ "มาก" ขึ้นไป</div>
+      <div class="kpi-label">พึงพอใจระดับ "มาก" ขึ้นไป</div>
       <div class="kpi-value"><span id="kpi-satisfied">—</span><span class="kpi-suffix">%</span></div>
       <div class="kpi-sub">ตอบ 4 หรือ 5 จากทุกข้อ</div>
     </div>
-    <div class="kpi">
+    <div class="kpi kpi-highlight">
       <div class="kpi-accent"></div>
-      <div class="kpi-label">ข้อที่ควรพัฒนาที่สุด</div>
-      <div class="kpi-value" style="font-size: 15px; line-height: 1.3;" id="kpi-lowest-item">—</div>
-      <div class="kpi-sub"><span id="kpi-lowest-score">—</span> คะแนน</div>
+      <div class="kpi-label">ความรู้ SAO OKRs เพิ่มขึ้น</div>
+      <div class="kpi-value" style="color: var(--gold);"><span id="kpi-delta-pct">—</span><span class="kpi-suffix">%</span></div>
+      <div class="kpi-sub">หลังการสัมมนา (Pre → Post)</div>
+    </div>
+  </section>
+
+  <!-- ============ Top 3 / Bottom 3 Insights ============ -->
+  <section class="insights-grid">
+    <div class="panel insight-panel insight-top">
+      <div class="panel-title">⭐ 3 อันดับที่ทำได้ดีที่สุด</div>
+      <div class="panel-subtitle">จุดเด่นที่ควรรักษาไว้และต่อยอด</div>
+      <div id="top-items" class="insight-list"></div>
+    </div>
+    <div class="panel insight-panel insight-bottom">
+      <div class="panel-title">⚠️ 3 อันดับที่ควรพัฒนา</div>
+      <div class="panel-subtitle">ประเด็นที่ควรปรับปรุงในการจัดครั้งถัดไป</div>
+      <div id="bottom-items" class="insight-list"></div>
     </div>
   </section>
 
@@ -601,29 +727,46 @@
 
   <!-- ============ Distribution ============ -->
   <section class="panel" style="margin-bottom: 24px;">
-    <div class="panel-title">การกระจายระดับคะแนน (Rating Distribution)</div>
-    <div class="panel-subtitle">สัดส่วนของคำตอบในแต่ละระดับ 1-5 จากคำถาม Likert ทั้ง 20 ข้อ</div>
+    <div class="panel-title">การกระจายระดับคะแนนตามด้านการประเมิน</div>
+    <div class="panel-subtitle">สัดส่วนของคำตอบระดับ 1-5 ในแต่ละด้าน — ด้านที่มีสีแดง/ส้มมาก คือด้านที่ควรพัฒนา</div>
     <div class="chart-box tall"><canvas id="chart-distribution"></canvas></div>
+  </section>
+
+  <!-- ============ Recommendations ============ -->
+  <section class="panel recommendations-panel" style="margin-bottom: 24px;">
+    <div class="panel-title">💡 ข้อเสนอแนะเชิงนโยบาย (Key Recommendations)</div>
+    <div class="panel-subtitle">สรุปประเด็นสำคัญและข้อเสนอต่อผู้บริหารสำหรับการตัดสินใจครั้งถัดไป</div>
+    <div class="recommendations-content" id="recommendations-content">
+      <ul>
+        <li id="rec-item-1">—</li>
+        <li id="rec-item-2">—</li>
+        <li id="rec-item-3">—</li>
+      </ul>
+    </div>
   </section>
 
   <!-- ============ Detail bars ============ -->
   <section class="panel" style="margin-bottom: 24px;">
-    <div class="panel-title">คะแนนรายข้อทั้งหมด (20 ข้อ)</div>
-    <div class="panel-subtitle">คะแนนเฉลี่ยทุกข้อ จัดกลุ่มตามด้านการประเมิน พร้อมระดับการแปลผล</div>
+    <div class="panel-title">คะแนนรายข้อทั้งหมด (22 ข้อ)</div>
+    <div class="panel-subtitle">คะแนนเฉลี่ยทุกข้อ จัดกลุ่มตามด้านการประเมิน • hover เพื่อดูข้อความเต็ม</div>
     <div id="detail-bars"></div>
   </section>
 
   <!-- ============ Open-ended ============ -->
   <section class="panel">
     <div class="panel-title">ข้อเสนอแนะและความคิดเห็นปลายเปิด</div>
-    <div class="panel-subtitle">เสียงจากผู้เข้าร่วมโครงการโดยตรง</div>
+    <div class="panel-subtitle">สรุปประเด็นหลักที่ผู้เข้าร่วมกล่าวถึง พร้อมความคิดเห็นทั้งหมด</div>
     <div class="comments-grid">
       <div>
         <div class="detail-section-title">สิ่งที่เป็นประโยชน์มากที่สุด / นำไปประยุกต์ใช้ได้ <span id="count-benefit" style="color: var(--text-soft); font-weight: 400;"></span></div>
+        <div class="themes-title">🏷️ ประเด็นหลักที่กล่าวถึง</div>
+        <div class="themes-list" id="themes-benefit"></div>
         <div class="comment-list" id="comments-benefit"></div>
       </div>
       <div>
         <div class="detail-section-title">ข้อเสนอแนะอื่น ๆ <span id="count-suggestion" style="color: var(--text-soft); font-weight: 400;"></span></div>
+        <div class="themes-title">🏷️ ประเด็นหลักที่ควรพิจารณา</div>
+        <div class="themes-list" id="themes-suggestion"></div>
         <div class="comment-list" id="comments-suggestion"></div>
       </div>
     </div>
@@ -719,9 +862,20 @@ function setMode(mode) {
   loadData();
 }
 
-// Read URL param ?demo=1
+// URL params: ?demo=1 (force demo), ?dev=1 (show mode toggle buttons)
 const urlParams = new URLSearchParams(window.location.search);
+const isDevMode = urlParams.get('dev') === '1';
 if (urlParams.get('demo') === '1') currentMode = 'demo';
+
+// ซ่อนปุ่ม Live/Demo ในโหมดปกติ (ผู้บริหารไม่ต้องเห็น) — เข้าด้วย ?dev=1 เพื่อ toggle
+if (!isDevMode) {
+  document.addEventListener('DOMContentLoaded', () => {
+    const btnLive = document.getElementById('btn-live');
+    const btnDemo = document.getElementById('btn-demo');
+    if (btnLive) btnLive.style.display = 'none';
+    if (btnDemo) btnDemo.style.display = 'none';
+  });
+}
 
 // ============================================================
 // DATA LOADING
@@ -832,13 +986,26 @@ function aggregate(rows) {
   const satisfied = allRatings.filter(v => v >= 4).length;
   const satisfiedPct = allRatings.length ? (satisfied / allRatings.length) * 100 : 0;
 
-  // Distribution: count of each rating 1-5
-  const distribution = [0, 0, 0, 0, 0]; // index 0 = rating 1, etc
+  // Distribution: count of each rating 1-5 (สำหรับ per-area)
+  const distribution = [0, 0, 0, 0, 0];
   allRatings.forEach(v => {
     if (v >= 1 && v <= 5) distribution[v - 1]++;
   });
 
-  // Find highest & lowest items across all areas (สำหรับ Executive Summary + KPI)
+  // Distribution per area — จำนวนคำตอบ rating 1-5 แยกแต่ละด้าน
+  const distByArea = {};
+  ['content', 'apply', 'manage', 'objective'].forEach(area => {
+    const dist = [0, 0, 0, 0, 0];
+    rows.forEach(r => {
+      COL[area].forEach(c => {
+        const v = Number(r[c]);
+        if (v >= 1 && v <= 5) dist[v - 1]++;
+      });
+    });
+    distByArea[area] = dist;
+  });
+
+  // Find all items with scores (สำหรับ Top 3 / Bottom 3)
   const allItems = [];
   ['content', 'apply', 'manage', 'objective'].forEach(area => {
     LABELS[area].forEach((label, i) => {
@@ -858,7 +1025,7 @@ function aggregate(rows) {
   const benefits = rows.map(r => String(r[COL.openBenefit] || '').trim()).filter(t => t.length > 1);
   const suggestions = rows.map(r => String(r[COL.openSuggestion] || '').trim()).filter(t => t.length > 1);
 
-  return { n, knowBefore, knowAfter, areaScores, itemScores, overall, satisfiedPct, distribution, lowest, highest, affCount, benefits, suggestions };
+  return { n, knowBefore, knowAfter, areaScores, itemScores, overall, satisfiedPct, distribution, distByArea, allItems, lowest, highest, affCount, benefits, suggestions };
 }
 
 // ============================================================
@@ -883,16 +1050,21 @@ function render(rows) {
 
   // KPIs
   document.getElementById('kpi-respondents').textContent = a.n;
+  document.getElementById('kpi-respondents-sub').textContent = `จากทั้งหมด ${a.n} คน`;
   document.getElementById('kpi-overall').textContent = a.overall.toFixed(2);
   applyLikertTag('kpi-overall-tag', a.overall);
   document.getElementById('kpi-satisfied').textContent = a.satisfiedPct.toFixed(1);
-  const kpiLowest = document.getElementById('kpi-lowest-item');
-  kpiLowest.textContent = a.lowest.short;
-  kpiLowest.title = a.lowest.full; // แสดง full text เมื่อ hover
-  document.getElementById('kpi-lowest-score').textContent = a.lowest.score.toFixed(2);
+  // KPI Δ% ความรู้เพิ่มขึ้น (แทน "ข้อควรพัฒนา" เดิม)
+  document.getElementById('kpi-delta-pct').textContent = (pct >= 0 ? '+' : '') + pct.toFixed(0);
 
-  // Executive Summary — สร้างประโยคสรุปอัตโนมัติจากข้อมูล
+  // Executive Summary
   renderExecutiveSummary(a);
+
+  // Top 3 / Bottom 3 Insights
+  renderTopBottom(a.allItems);
+
+  // Auto-generate Recommendations
+  renderRecommendations(a);
 
   // Updated time
   document.getElementById('updated-at').textContent = new Date().toLocaleString('th-TH', {
@@ -906,7 +1078,7 @@ function render(rows) {
   // Charts
   renderAreaChart(a.areaScores);
   renderAffiliationChart(a.affCount);
-  renderDistributionChart(a.distribution);
+  renderDistributionChart(a.distByArea);
   renderDetailBars(a.itemScores);
   renderComments(a.benefits, a.suggestions);
 }
@@ -983,35 +1155,137 @@ function renderAffiliationChart(affCount) {
   });
 }
 
-function renderDistributionChart(dist) {
+function renderDistributionChart(distByArea) {
   if (chartDist) chartDist.destroy();
-  const total = dist.reduce((a, b) => a + b, 0);
-  const pcts = dist.map(v => total ? (v / total) * 100 : 0);
+  const areas = ['content', 'apply', 'manage', 'objective'];
+  const areaLabels = ['เนื้อหาการสัมมนา', 'การนำไปใช้', 'การบริหารจัดการ', 'วัตถุประสงค์'];
+
+  // แต่ละด้าน — คำนวณ % ของ rating 1-5
+  const dataByRating = [1, 2, 3, 4, 5].map(rating => {
+    return areas.map(area => {
+      const dist = distByArea[area];
+      const total = dist.reduce((a, b) => a + b, 0);
+      return total > 0 ? (dist[rating - 1] / total * 100) : 0;
+    });
+  });
+
+  const ratingLabels = ['1 — น้อยที่สุด', '2 — น้อย', '3 — ปานกลาง', '4 — มาก', '5 — มากที่สุด'];
+  const ratingColors = ['#DC2626', '#F97316', '#F59E0B', '#10B981', '#059669'];
+
   chartDist = new Chart(document.getElementById('chart-distribution'), {
     type: 'bar',
     data: {
-      labels: ['1 — น้อยที่สุด', '2 — น้อย', '3 — ปานกลาง', '4 — มาก', '5 — มากที่สุด'],
-      datasets: [{
-        label: 'จำนวนคำตอบ',
-        data: dist,
-        backgroundColor: ['#DC2626', '#F97316', '#F59E0B', '#10B981', '#059669'],
-        borderRadius: 8,
-        barThickness: 60,
-      }]
+      labels: areaLabels,
+      datasets: [1, 2, 3, 4, 5].map((rating, i) => ({
+        label: ratingLabels[i],
+        data: dataByRating[i],
+        backgroundColor: ratingColors[i],
+        borderRadius: 4,
+        stack: 'stack1',
+      }))
     },
     options: {
       indexAxis: 'y',
       responsive: true, maintainAspectRatio: false,
       plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: (c) => `${c.parsed.x} คำตอบ (${pcts[c.dataIndex].toFixed(1)}%)` } }
+        legend: { position: 'bottom', labels: { font: { family: 'Sarabun', size: 11 }, boxWidth: 12, padding: 10 } },
+        tooltip: {
+          callbacks: {
+            label: (c) => {
+              const areaKey = areas[c.dataIndex];
+              const rating = c.datasetIndex + 1;
+              const count = distByArea[areaKey][rating - 1];
+              return `ระดับ ${rating}: ${count} คำตอบ (${c.parsed.x.toFixed(1)}%)`;
+            }
+          }
+        }
       },
       scales: {
-        x: { beginAtZero: true, ticks: { font: { family: 'Sarabun' } }, grid: { color: '#E2E8F0' } },
-        y: { ticks: { font: { family: 'Sarabun', size: 13 } }, grid: { display: false } }
+        x: {
+          stacked: true, beginAtZero: true, max: 100,
+          ticks: { font: { family: 'Sarabun' }, callback: (v) => v + '%' },
+          grid: { color: '#E2E8F0' }
+        },
+        y: {
+          stacked: true,
+          ticks: { font: { family: 'Sarabun', size: 13 } },
+          grid: { display: false }
+        }
       }
     }
   });
+}
+
+// ============================================================
+// TOP 3 / BOTTOM 3 INSIGHTS
+// ============================================================
+const AREA_THAI = { content: 'เนื้อหาการสัมมนา', apply: 'การนำไปใช้', manage: 'การบริหารจัดการ', objective: 'วัตถุประสงค์' };
+
+function renderTopBottom(allItems) {
+  const sorted = [...allItems].sort((a, b) => b.score - a.score);
+  const top3 = sorted.slice(0, 3);
+  const bottom3 = sorted.slice(-3).reverse();
+
+  const renderList = (id, items) => {
+    document.getElementById(id).innerHTML = items.map((it, i) => `
+      <div class="insight-item" title="${escapeHtml(it.full)}">
+        <div class="insight-rank">${i + 1}</div>
+        <div class="insight-content">
+          <div class="insight-label">${escapeHtml(it.short)}</div>
+          <div class="insight-area">${AREA_THAI[it.area]}</div>
+        </div>
+        <div class="insight-score">${it.score.toFixed(2)}</div>
+      </div>
+    `).join('');
+  };
+  renderList('top-items', top3);
+  renderList('bottom-items', bottom3);
+}
+
+// ============================================================
+// AUTO-GENERATE RECOMMENDATIONS
+// ============================================================
+function renderRecommendations(a) {
+  const lvl = likertLevel(a.overall);
+  const sorted = [...a.allItems].sort((x, y) => y.score - x.score);
+  const top = sorted[0];
+  const bottom = sorted[sorted.length - 1];
+  const deltaPct = a.knowBefore > 0 ? ((a.knowAfter - a.knowBefore) / a.knowBefore * 100) : 0;
+
+  const recs = [
+    `<strong>ผลสัมฤทธิ์:</strong> โครงการบรรลุวัตถุประสงค์ในระดับ <strong>${lvl.label}</strong> (${a.overall.toFixed(2)}/5) โดยผู้เข้าร่วมมีความรู้เกี่ยวกับ SAO OKRs เพิ่มขึ้น <strong>${deltaPct.toFixed(0)}%</strong> สะท้อนความพร้อมในการนำไปใช้จัดทำแผนการตรวจสอบและแผนปฏิบัติราชการ ประจำปีงบประมาณ พ.ศ. 2570`,
+    `<strong>จุดแข็งที่ควรรักษาไว้:</strong> "${top.short}" (${top.score.toFixed(2)}) เป็นจุดที่ผู้เข้าร่วมประเมินสูงสุด แนะนำให้คงแนวปฏิบัติเดิมไว้และต่อยอดในโครงการครั้งถัดไป`,
+    `<strong>ประเด็นที่ต้องปรับปรุง:</strong> "${bottom.short}" (${bottom.score.toFixed(2)}) ได้คะแนนต่ำที่สุด ผู้บริหารควรมอบหมายให้ทีมงานพิจารณาแนวทางแก้ไขสำหรับการจัดครั้งถัดไป`,
+  ];
+  document.getElementById('rec-item-1').innerHTML = recs[0];
+  document.getElementById('rec-item-2').innerHTML = recs[1];
+  document.getElementById('rec-item-3').innerHTML = recs[2];
+}
+
+// ============================================================
+// COMMENT THEMES
+// ============================================================
+const THEME_KEYWORDS = {
+  'Workshop/เวิร์กช็อป': ['workshop', 'เวิร์คช็อป', 'เวิร์กช็อป', 'ปฏิบัติ', 'ฝึกปฏิบัติ'],
+  'เวลา/ระยะเวลา': ['เพิ่มเวลา', 'ระยะเวลา', 'เวลามาก', 'เวลาน้อย', 'ยาวไป', 'สั้นไป'],
+  'ตัวอย่าง/กรณีศึกษา': ['ตัวอย่าง', 'case study', 'กรณีศึกษา', 'ยกตัวอย่าง'],
+  'เอกสาร/สื่อ': ['เอกสาร', 'handout', 'สื่อ', 'presentation', 'สไลด์'],
+  'สถานที่/เดินทาง': ['สถานที่', 'เดินทาง', 'ที่พัก', 'ไกล', 'ใกล้'],
+  'วิทยากร': ['วิทยากร', 'ผู้บรรยาย', 'ผู้สอน'],
+  'การนำไปใช้': ['ประยุกต์', 'นำไปใช้', 'ปฏิบัติงาน', 'ใช้งาน', 'ต่อยอด'],
+  'อาหาร/บริการ': ['อาหาร', 'เครื่องดื่ม', 'บริการ', 'จัดเลี้ยง'],
+  'follow-up': ['follow-up', 'ติดตาม', 'ครั้งถัดไป', 'ครั้งต่อไป'],
+};
+
+function extractThemes(comments) {
+  const counts = {};
+  for (const [theme, keywords] of Object.entries(THEME_KEYWORDS)) {
+    const matches = comments.filter(c =>
+      keywords.some(kw => c.toLowerCase().includes(kw.toLowerCase()))
+    ).length;
+    if (matches > 0) counts[theme] = matches;
+  }
+  return Object.entries(counts).sort((a, b) => b[1] - a[1]);
 }
 
 function renderDetailBars(itemScores) {
@@ -1054,8 +1328,22 @@ function renderComments(benefits, suggestions) {
     }
     el.innerHTML = items.map(t => `<div class="comment-item">${escapeHtml(t)}</div>`).join('');
   };
+  const renderThemes = (id, comments) => {
+    const themes = extractThemes(comments);
+    const el = document.getElementById(id);
+    if (themes.length === 0) {
+      el.style.display = 'none';
+      return;
+    }
+    el.style.display = 'flex';
+    el.innerHTML = themes.map(([theme, count]) =>
+      `<span class="theme-chip">${theme} <span class="theme-chip-count">${count}</span></span>`
+    ).join('');
+  };
   renderList('comments-benefit', benefits);
   renderList('comments-suggestion', suggestions);
+  renderThemes('themes-benefit', benefits);
+  renderThemes('themes-suggestion', suggestions);
 }
 
 function escapeHtml(s) {

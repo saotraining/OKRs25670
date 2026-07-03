@@ -11,27 +11,28 @@
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <style>
   :root {
-    /* โทนสีเรียบ สุภาพ เข้ากับแบนเนอร์น้ำเงิน-ทอง */
-    --bg: #F2F6FA;
-    --card: #FFFFFF;
-    --navy: #082A4D;
-    --primary: #0B78B8;
-    --primary-soft: #EAF4FB;
-    --gold: #C79A2B;
-    --gold-soft: #FFF7E6;
-    --text: #102033;
-    --text-mid: #5F6F82;
-    --text-soft: #91A0B3;
-    --border: #DCE7F1;
+    /* โทนครีม–ส้มอ่อน ให้เข้ากับแบนเนอร์น้ำเงิน–ทอง */
+    --bg: #FFF8F0;
+    --card: #FFFDF9;
+    --navy: #123456;
+    --primary: #0B6FA4;
+    --primary-soft: #EEF6FA;
+    --gold: #D98C2B;
+    --gold-soft: #FCEFD9;
+    --orange-soft: #F7E7CF;
+    --text: #1F2F3E;
+    --text-mid: #6E6A63;
+    --text-soft: #9B9288;
+    --border: #E9D8C7;
     --likert-5: #0B8F6A;
     --likert-4: #18B884;
-    --likert-3: #F0A51A;
+    --likert-3: #D98C2B;
     --likert-2: #EA7A18;
     --likert-1: #D33A3A;
-    --shadow: 0 1px 2px rgba(8,42,77,0.05), 0 8px 22px rgba(8,42,77,0.06);
+    --shadow: 0 1px 2px rgba(79,52,28,0.05), 0 8px 22px rgba(79,52,28,0.07);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { background: radial-gradient(circle at top left, #FFFFFF 0, #F2F6FA 38%, #EDF3F8 100%); color: var(--text); font-family: 'Sarabun', sans-serif; line-height: 1.5; }
+  html, body { background: linear-gradient(180deg, #FFF8F0 0%, #FBF1E3 52%, #F7E7CF 100%); color: var(--text); font-family: 'Sarabun', sans-serif; line-height: 1.5; }
   body { min-height: 100vh; padding: 24px 16px 48px; }
   .container { max-width: 1280px; margin: 0 auto; }
 
@@ -117,17 +118,19 @@
     gap: 12px 24px;
     align-items: center;
     padding: 12px 24px;
-    background: linear-gradient(135deg, #071F3A 0%, #0B5F9B 68%, #0E7EAF 100%);
-    color: white;
+    background: linear-gradient(135deg, #FFF8F0 0%, #FCEFD9 58%, #F4D5AA 100%);
+    border-top: 1px solid rgba(217,140,43,.20);
+    color: var(--navy);
     font-size: 13px;
   }
   .header-meta div span:first-child {
     display: block;
-    opacity: 0.70;
+    opacity: 0.72;
     font-size: 11px;
     letter-spacing: 0;
     text-transform: none;
     margin-bottom: 1px;
+    color: #7A6147;
   }
   .header-meta div span:last-child {
     font-family: 'Prompt', sans-serif;
@@ -156,9 +159,9 @@
     align-items: center;
   }
   .btn {
-    background: rgba(255,255,255,0.12);
-    color: white;
-    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(11,111,164,0.10);
+    color: var(--navy);
+    border: 1px solid rgba(11,111,164,0.18);
     padding: 6px 14px;
     border-radius: 999px;
     font-family: 'Sarabun', sans-serif;
@@ -169,9 +172,9 @@
     align-items: center;
     gap: 6px;
   }
-  .btn:hover { background: rgba(255,255,255,0.22); }
+  .btn:hover { background: rgba(217,140,43,0.18); }
   .btn:active { transform: scale(0.97); }
-  .btn.active { background: var(--gold); border-color: var(--gold); color: var(--navy); font-weight: 600; }
+  .btn.active { background: var(--gold); border-color: var(--gold); color: #FFFFFF; font-weight: 600; }
 
   /* ============ Mode banner ============ */
   .mode-banner {
@@ -646,6 +649,16 @@
   .likert-legend, .recommendations-panel { display: none !important; }
   .panel-subtitle { margin-bottom: 14px; }
   .kpi-sub { line-height: 1.45; }
+
+  /* เวอร์ชันตัดทอน: เน้นอ่านง่ายสำหรับผู้บริหาร */
+  .exec-summary, .likert-legend, .recommendations-panel, .distribution-panel { display: none !important; }
+  .themes-title, .themes-list { display: none !important; }
+  .panel-subtitle:empty { display: none; }
+  .hero, .kpi, .panel { background: var(--card); border-color: var(--border); }
+  .kpi:nth-child(2) .kpi-accent, .prepost-delta { background: var(--gold-soft); color: var(--gold); }
+  .section-label { color: var(--gold); letter-spacing: 1px; text-transform: none; }
+  .comment-item { background: #FFF6EA; border-left-color: var(--gold); }
+
 </style>
 </head>
 <body>
@@ -675,15 +688,6 @@
     <strong>🎲 ข้อมูลตัวอย่าง:</strong> <span id="mode-banner-text">กำลังแสดงข้อมูลจำลอง 40 ชุดจากไฟล์ <code>mock-data.json</code> เพื่อทดสอบหน้าจอ — ไม่กระทบข้อมูลจริงใน Google Sheet</span>
   </div>
 
-  <!-- ============ Executive Summary ============ -->
-  <section class="exec-summary">
-    <div class="exec-summary-icon">📋</div>
-    <div class="exec-summary-content">
-      
-      <div class="exec-summary-text" id="exec-summary-text"><span style="opacity: 0.4;">— ประมวลผลข้อมูล —</span></div>
-      <div class="exec-summary-chips" id="exec-summary-chips"></div>
-    </div>
-  </section>
 
   <!-- ============ Likert Legend ============ -->
   <div class="likert-legend">
@@ -735,15 +739,15 @@
     </div>
     <div class="kpi">
       <div class="kpi-accent"></div>
-      <div class="kpi-label">คำตอบระดับ “มาก” ขึ้นไป</div>
+      <div class="kpi-label">ระดับมากขึ้นไป</div>
       <div class="kpi-value"><span id="kpi-satisfied">—</span><span class="kpi-suffix">%</span></div>
-      <div class="kpi-sub">ระดับ 4–5 จากทุกข้อ</div>
+      <div class="kpi-sub">คะแนนระดับ 4–5</div>
     </div>
     <div class="kpi kpi-highlight">
       <div class="kpi-accent"></div>
-      <div class="kpi-label">ความรู้ความเข้าใจเพิ่มขึ้น</div>
+      <div class="kpi-label">ความรู้เพิ่มขึ้น</div>
       <div class="kpi-value" style="color: var(--gold);"><span id="kpi-delta-pct">—</span><span class="kpi-suffix">%</span></div>
-      <div class="kpi-sub">ก่อนเทียบหลัง</div>
+      <div class="kpi-sub">หลังสัมมนาเทียบก่อนสัมมนา</div>
     </div>
   </section>
 
@@ -751,12 +755,12 @@
   <section class="insights-grid">
     <div class="panel insight-panel insight-top">
       <div class="panel-title">จุดเด่น</div>
-      <div class="panel-subtitle">รายการที่ได้คะแนนสูง</div>
+      <div class="panel-subtitle"></div>
       <div id="top-items" class="insight-list"></div>
     </div>
     <div class="panel insight-panel insight-bottom">
       <div class="panel-title">ควรพัฒนา</div>
-      <div class="panel-subtitle">รายการที่ได้คะแนนต่ำกว่าเรื่องอื่น</div>
+      <div class="panel-subtitle"></div>
       <div id="bottom-items" class="insight-list"></div>
     </div>
   </section>
@@ -765,22 +769,16 @@
   <section class="chart-grid">
     <div class="panel">
       <div class="panel-title">คะแนนเฉลี่ยรายด้าน</div>
-      <div class="panel-subtitle">เปรียบเทียบ 4 ด้านการประเมิน</div>
+      <div class="panel-subtitle"></div>
       <div class="chart-box"><canvas id="chart-areas"></canvas></div>
     </div>
     <div class="panel">
       <div class="panel-title">สังกัดของผู้ตอบ</div>
-      <div class="panel-subtitle">จำแนกตามหน่วยงาน</div>
+      <div class="panel-subtitle"></div>
       <div class="chart-box"><canvas id="chart-affiliation"></canvas></div>
     </div>
   </section>
 
-  <!-- ============ Distribution ============ -->
-  <section class="panel" style="margin-bottom: 24px;">
-    <div class="panel-title">สัดส่วนระดับคะแนน</div>
-    <div class="panel-subtitle">แสดงคำตอบระดับ 1–5 ในแต่ละด้าน</div>
-    <div class="chart-box tall"><canvas id="chart-distribution"></canvas></div>
-  </section>
 
   <!-- ============ Recommendations ============ -->
   <section class="panel recommendations-panel" style="margin-bottom: 24px;">
@@ -798,14 +796,14 @@
   <!-- ============ Detail bars ============ -->
   <section class="panel" style="margin-bottom: 24px;">
     <div class="panel-title">คะแนนรายข้อ</div>
-    <div class="panel-subtitle">เรียงตามคะแนนในแต่ละด้าน</div>
+    <div class="panel-subtitle"></div>
     <div id="detail-bars"></div>
   </section>
 
   <!-- ============ Open-ended ============ -->
   <section class="panel">
-    <div class="panel-title">ความคิดเห็นปลายเปิด</div>
-    <div class="panel-subtitle">ข้อความจากผู้ตอบแบบประเมิน</div>
+    <div class="panel-title">ข้อคิดเห็นเพิ่มเติม</div>
+    <div class="panel-subtitle"></div>
     <div class="comments-grid">
       <div>
         <div class="detail-section-title">ประโยชน์ที่ได้รับ / การนำไปใช้ <span id="count-benefit" style="color: var(--text-soft); font-weight: 400;"></span></div>
@@ -814,7 +812,7 @@
         <div class="comment-list" id="comments-benefit"></div>
       </div>
       <div>
-        <div class="detail-section-title">ข้อเสนอแนะ <span id="count-suggestion" style="color: var(--text-soft); font-weight: 400;"></span></div>
+        <div class="detail-section-title">ข้อเสนอแนะเพิ่มเติม <span id="count-suggestion" style="color: var(--text-soft); font-weight: 400;"></span></div>
         <div class="themes-title">ประเด็นหลัก</div>
         <div class="themes-list" id="themes-suggestion"></div>
         <div class="comment-list" id="comments-suggestion"></div>
@@ -1100,21 +1098,17 @@ function render(rows) {
 
   // KPIs
   document.getElementById('kpi-respondents').textContent = a.n;
-  document.getElementById('kpi-respondents-sub').textContent = `จากผู้ตอบแบบประเมิน ${a.n} คน`;
+  document.getElementById('kpi-respondents-sub').textContent = a.n < 10 ? 'ข้อมูลเบื้องต้น' : 'จำนวนผู้ตอบแบบประเมิน';
   document.getElementById('kpi-overall').textContent = a.overall.toFixed(2);
   applyLikertTag('kpi-overall-tag', a.overall);
   document.getElementById('kpi-satisfied').textContent = a.satisfiedPct.toFixed(1);
   // KPI Δ% ความรู้เพิ่มขึ้น (แทน "ข้อควรพัฒนา" เดิม)
   document.getElementById('kpi-delta-pct').textContent = (pct >= 0 ? '+' : '') + pct.toFixed(0);
 
-  // Executive Summary
-  renderExecutiveSummary(a);
 
   // Top 3 / Bottom 3 Insights
   renderTopBottom(a.allItems);
 
-  // Auto-generate Recommendations
-  renderRecommendations(a);
 
   // Updated time
   document.getElementById('updated-at').textContent = new Date().toLocaleString('th-TH', {
@@ -1122,13 +1116,12 @@ function render(rows) {
   });
 
   // Counts in comment headers
-  document.getElementById('count-benefit').textContent = `(${a.benefits.length})`;
-  document.getElementById('count-suggestion').textContent = `(${a.suggestions.length})`;
+  document.getElementById('count-benefit').textContent = a.benefits.length > 1 ? `(${a.benefits.length})` : '';
+  document.getElementById('count-suggestion').textContent = a.suggestions.length > 1 ? `(${a.suggestions.length})` : '';
 
   // Charts
   renderAreaChart(a.areaScores);
   renderAffiliationChart(a.affCount);
-  renderDistributionChart(a.distByArea);
   renderDetailBars(a.itemScores);
   renderComments(a.benefits, a.suggestions);
 }
@@ -1379,12 +1372,10 @@ function renderComments(benefits, suggestions) {
     el.innerHTML = items.map(t => `<div class="comment-item">${escapeHtml(t)}</div>`).join('');
   };
   const renderThemes = (id, comments) => {
-    const themes = extractThemes(comments);
     const el = document.getElementById(id);
-    if (themes.length === 0) {
-      el.style.display = 'none';
-      return;
-    }
+    if (!el || comments.length < 3) { if (el) el.style.display = 'none'; return; }
+    const themes = extractThemes(comments);
+    if (themes.length === 0) { el.style.display = 'none'; return; }
     el.style.display = 'flex';
     el.innerHTML = themes.map(([theme, count]) =>
       `<span class="theme-chip">${theme} <span class="theme-chip-count">${count}</span></span>`
